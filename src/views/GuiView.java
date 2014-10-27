@@ -65,11 +65,4 @@ public class GuiView {
 		
 		return board;
 	}
-
-	
-	/* Demo to test GUI */
-	public static void main(String[] args) {
-		GuiView testview = new GuiView();
-	}
-
 }
