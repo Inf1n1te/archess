@@ -70,10 +70,14 @@ public class DataListener {
 		System.out.println("Pin 8: " + Gpio.digitalRead(8));
 		
 		// parse the first square 
-		String firstInt = "0000" + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4);
-		byte data = (byte) Integer.parseInt(firstInt, 2);
+		String firstBits = "0000" + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4);
+		int firstInt = Integer.parseInt(firstBits, 2);
 		
-		System.out.println("First square has value: " + firstInt + " Parsed this to byte: " + data);
+		// parse the second square
+		String secondBits = "0000" + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(7) + Gpio.digitalRead(8);
+		int secondInt = Integer.parseInt(secondBits, 2);
+		
+		System.out.println("First square has value: " + firstInt + " Second square has value: " + secondInt);
 	}
 }
 
