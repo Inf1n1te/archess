@@ -52,6 +52,9 @@ public class DataListener {
         Gpio.pullUpDnControl(0, Gpio.PUD_DOWN);        
         GpioInterrupt.enablePinStateChangeCallback(0);
         
+        //########################################################
+        //set all the other pins to input pins
+        
         System.out.println("[DataListener] booted up succesfully..");
         
         // continuously loop to prevent program from exiting
