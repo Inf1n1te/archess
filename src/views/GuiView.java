@@ -3,16 +3,20 @@ package views;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
+import controllers.DataController;
 import net.miginfocom.swing.MigLayout;
 
 public class GuiView {
 
 	// all the necessary components
 	JPanel history, board;
+	private JButton startListener;
 	
 	/**
 	 * Create a new window with components [history], [board]
@@ -31,8 +35,14 @@ public class GuiView {
 		// get board panel
 		board = createBoardView();
 		
+		// start button
+		startListener = new JButton("Start DataListener");
+		startListener.setName("startListener");
+		
+		window.add(startListener, "width 100%, height 50px, span");
 		window.add(history, "width 25%");
 		window.add(board, "width 75%");
+		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
 	
@@ -64,5 +74,12 @@ public class GuiView {
 		board.add(boardLabel);
 		
 		return board;
+	}
+	
+	/**
+	 * Adds the actionListeners on the buttons.
+	 */
+	public void addActionListeners(DataController ae) {
+		startListener.addActionListener(ae);
 	}
 }
