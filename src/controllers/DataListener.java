@@ -13,6 +13,7 @@ public class DataListener {
 	private int receivedSquares;
 	private int[] boardRawData;
 	private int[][] boardData;
+	private DataReceiver receiver;
 	
 	/**
 	 * The data listener is constantly waiting for an interrupt on pin 0 (falling edge)
@@ -59,7 +60,7 @@ public class DataListener {
         Gpio.pinMode(5, Gpio.INPUT);
         Gpio.pinMode(6, Gpio.INPUT);
         Gpio.pinMode(7, Gpio.INPUT);
-        Gpio.pinMode(8, Gpio.INPUT);
+        Gpio.pinMode(17, Gpio.INPUT);
         
         System.out.println("[DataListener] booted up succesfully..");
         
@@ -86,7 +87,7 @@ public class DataListener {
 		}
 		
 		System.out.println("[Interrupt] Clock is falling going to handle the data.");
-		System.out.println("[DataListener] Pin values: " + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(7) + Gpio.digitalRead(8));
+		System.out.println("[DataListener] Pin values: " + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(7) + Gpio.digitalRead(17));
 		System.out.println("[DataListener] Receiving square: " + receivedSquares + " + 2");
 		// parse the first square 
 		String firstBits = "0000" + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4);
@@ -96,7 +97,7 @@ public class DataListener {
 		receivedSquares++;
 		
 		// parse the second square
-		String secondBits = "0000" + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(7) + Gpio.digitalRead(8);
+		String secondBits = "0000" + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(7) + Gpio.digitalRead(17);
 		int secondInt = Integer.parseInt(secondBits, 2);
 		
 		boardRawData[receivedSquares] = secondInt;
@@ -123,14 +124,30 @@ public class DataListener {
 			}
 		}
 		
-		// print out the matrix for now
+		/* print out the matrix for now
 		for (int x = 0; x < 8; x++) {
 			System.out.print("[");
 			for (int y = 0; y < 8; y++) {
 				System.out.print("[" + boardData[x][y] + "],");
 			}
 			System.out.print("]\n");
-		}
+		} */
+		
+		dataReceived();
+	}
+	
+	public void register(DataController controller) {
+		receiver = controller;
+	}
+	
+    private void dataReceived(){
+    	receiver.onDataReceived();
+    }
+	
+	/** interface for callbacks
+	 */
+	public interface DataReceiver {
+		void onDataReceived();
 	}
 }
 

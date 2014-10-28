@@ -5,9 +5,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
+import controllers.DataListener.DataReceiver;
 import views.GuiView;
 
-public class DataController implements ActionListener {
+public class DataController implements ActionListener, DataReceiver {
 
 	// data controller has an GuiView and DataListener
 	private GuiView view;
@@ -39,7 +40,13 @@ public class DataController implements ActionListener {
 		if (clickedButton.getName().equals("startListener")) {
 			System.out.println("[DataController] startListener has been pushed, booting up DataListener..");
 			listener = new DataListener();
+			listener.register(this);
 		}
+	}
+
+	@Override
+	public void onDataReceived() {
+		System.out.println("[DataController] Data has been received by the listener");
 	}
 
 }
