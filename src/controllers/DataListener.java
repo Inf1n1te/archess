@@ -46,12 +46,20 @@ public class DataListener {
         GpioUtil.setEdgeDetection(0, GpioUtil.EDGE_BOTH);
 
         // configure GPIO 0 as an INPUT pin; enable it for callbacks
-        Gpio.pinMode(0, Gpio.OUTPUT);
+        Gpio.pinMode(0, Gpio.INPUT);
         Gpio.pullUpDnControl(0, Gpio.PUD_DOWN);        
         GpioInterrupt.enablePinStateChangeCallback(0);
         
         //########################################################
         //set all the other pins to input pins
+        Gpio.pinMode(1, Gpio.INPUT);
+        Gpio.pinMode(2, Gpio.INPUT);
+        Gpio.pinMode(3, Gpio.INPUT);
+        Gpio.pinMode(4, Gpio.INPUT);
+        Gpio.pinMode(5, Gpio.INPUT);
+        Gpio.pinMode(6, Gpio.INPUT);
+        Gpio.pinMode(7, Gpio.INPUT);
+        Gpio.pinMode(8, Gpio.INPUT);
         
         System.out.println("[DataListener] booted up succesfully..");
         
