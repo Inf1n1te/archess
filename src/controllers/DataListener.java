@@ -119,7 +119,7 @@ public class DataListener {
 		for (int x = 0; x < 8; x++) {
 			System.out.print("[");
 			for (int y = 0; y < 8; y++) {
-				System.out.println("[" + boardData[x][y] + "],");
+				System.out.print("[" + boardData[x][y] + "],");
 			}
 			System.out.print("]\n");
 		}
