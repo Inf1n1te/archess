@@ -110,9 +110,9 @@ public class Board {
 	 * generate a temporary board. Used for initialization.
 	 * 
 	 * @param rawBoard
-	 *            A Byte[] containing the raw data received from the FPGA.
+	 *            A int[][] containing the raw data received from the FPGA.
 	 */
-	public Board(Byte[] rawBoard) {
+	public Board(int[][] rawBoard) {
 		createTempBoard(rawBoard);
 		init();
 	}
@@ -137,10 +137,10 @@ public class Board {
 	 * @param raw
 	 *            The raw input data
 	 */
-	private void createTempBoard(Byte[] raw) {
+	private void createTempBoard(int[][] raw) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				tempBoard[i][j] = getTempPiece(raw[i * 8 + j]);
+				tempBoard[i][j] = getTempPiece(raw[i][j]);
 			}
 		}
 	}
@@ -172,7 +172,7 @@ public class Board {
 	 * @param rawBoard
 	 *            The raw input for a board
 	 */
-	public void newTurn(Byte[] rawBoard) {
+	public void newTurn(int[][] rawBoard) {
 		createTempBoard(rawBoard);
 		oldBoard = newBoard;
 		lastMove = new Move(this);
