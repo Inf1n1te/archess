@@ -12,6 +12,7 @@ public class DataController implements ActionListener {
 	// data controller has an GuiView and DataListener
 	private GuiView view;
 	private DataListener listener;
+	private boolean listenerBooted;
 	
 	/**
 	 * Instantiates the view
@@ -22,6 +23,7 @@ public class DataController implements ActionListener {
 		System.out.println("[DataController] Booted up the view");
 		// add the actionListeners on view
 		addActionListeners(this);
+		listenerBooted = false;
 	}
 	
 	/** 
@@ -38,13 +40,26 @@ public class DataController implements ActionListener {
 		JButton clickedButton = (JButton) ae.getSource();
 		if (clickedButton.getName().equals("startListener")) {
 			System.out.println("[DataController] startListener has been pushed, booting up DataListener..");
-			listener = new DataListener();
-			listener.register(this);
+			if (!listenerBooted) {
+				listener = new DataListener();
+				listener.register(this);
+				listener.start();
+				listenerBooted = true;
+			}
 		}
 	}
 	
-	public void onDataReceived() {
+	public void onDataReceived(int[][] boardData) {
 		System.out.println("[DataController] Data has been received by the listener");
+		
+		// print out the matrix for now
+		for (int x = 0; x < 8; x++) {
+			System.out.print("[");
+			for (int y = 0; y < 8; y++) {
+				System.out.print("[" + boardData[x][y] + "],");
+			}
+			System.out.print("]\n");
+		} 
 	}
 
 }

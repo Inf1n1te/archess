@@ -6,7 +6,7 @@ import com.pi4j.wiringpi.GpioInterruptListener;
 import com.pi4j.wiringpi.GpioInterruptEvent;
 import com.pi4j.wiringpi.GpioUtil;
 
-public class DataListener {
+public class DataListener extends Thread {
     
 	// keep track of state of received data
 	private boolean receivingData;
@@ -24,13 +24,15 @@ public class DataListener {
 		 boardRawData = new int[64];
 		 boardData = new int[8][8];
 		 System.out.println("[DataListener] Initialized empty board..");
-		 
-        // create and add GPIO listener 
+	}
+	
+	public void run() {
+		 // create and add GPIO listener 
         GpioInterrupt.addListener(new GpioInterruptListener() {
             @Override
             public void pinStateChange(GpioInterruptEvent event) {
                 	if (event.getState()) {
-				
+                		System.out.println("Triggered rising edge");
                 	} else {	
                 		readData();
 			}
@@ -44,12 +46,12 @@ public class DataListener {
         }
 
         // set the edge state on the pins we will be listening for
-        GpioUtil.setEdgeDetection(0, GpioUtil.EDGE_BOTH);
+        GpioUtil.setEdgeDetection(17, GpioUtil.EDGE_BOTH);
 
         // configure GPIO 0 as an INPUT pin; enable it for callbacks
-        Gpio.pinMode(0, Gpio.INPUT);
-        Gpio.pullUpDnControl(0, Gpio.PUD_DOWN);        
-        GpioInterrupt.enablePinStateChangeCallback(0);
+        Gpio.pinMode(17, Gpio.INPUT);
+        Gpio.pullUpDnControl(17, Gpio.PUD_DOWN);        
+        GpioInterrupt.enablePinStateChangeCallback(17);
         
         //########################################################
         //set all the other pins to input pins
@@ -73,7 +75,7 @@ public class DataListener {
 				e.printStackTrace();
 			}
         }
-	}
+    }
 	
 	/**
 	 * Parses the data from individual ints to bytes by first appending the ints
@@ -110,8 +112,6 @@ public class DataListener {
 			System.out.println("[DataListener] Done receiving the raw data creating matrix..");
 			createMatrix();
 		}
-		
-		dataReceived();
 	}
 	
 	/**
@@ -126,23 +126,16 @@ public class DataListener {
 			}
 		}
 		
-		/* print out the matrix for now
-		for (int x = 0; x < 8; x++) {
-			System.out.print("[");
-			for (int y = 0; y < 8; y++) {
-				System.out.print("[" + boardData[x][y] + "],");
-			}
-			System.out.print("]\n");
-		} */
+		dataReceived(boardData);
 	}
 	
 	public void register(DataController controller) {
 		receiver = controller;
 	}
 	
-    private void dataReceived(){
+    private void dataReceived(int[][] boardData){
     	System.out.println("Trying to call dataReceived()");
-    	receiver.onDataReceived();
+    	receiver.onDataReceived(boardData);
     }
 }
 
