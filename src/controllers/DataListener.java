@@ -12,6 +12,7 @@ public class DataListener {
 	private boolean receivingData;
 	private int receivedSquares;
 	private int[] boardRawData;
+	private int[][] boardData;
 	
 	/**
 	 * The data listener is constantly waiting for an interrupt on pin 0 (falling edge)
@@ -20,6 +21,7 @@ public class DataListener {
 	public DataListener() {
 		 System.out.println("[DataListener] Booting up...");
 		 boardRawData = new int[64];
+		 boardData = new int[8][8];
 		 System.out.println("[DataListener] Initialized empty board..");
 		 
         // create and add GPIO listener 
@@ -76,7 +78,7 @@ public class DataListener {
 		}
 		
 		System.out.println("[Interrupt] Clock is falling going to handle the data.");
-		System.out.println("Pin values: " + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(7) + Gpio.digitalRead(8));
+		System.out.println("[DataListener] Pin values: " + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(7) + Gpio.digitalRead(8));
 		System.out.println("[DataListener] Receiving square: " + receivedSquares + " + 2");
 		// parse the first square 
 		String firstBits = "0000" + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4);
@@ -92,13 +94,35 @@ public class DataListener {
 		boardRawData[receivedSquares] = secondInt;
 		receivedSquares++;
 		
-		System.out.println("First square has value: " + firstInt + " Second square has value: " + secondInt);
+		System.out.println("[DataListener] First square has value: " + firstInt + " Second square has value: " + secondInt);
 		
 		if (receivedSquares == 64) {
 			receivingData = false;
-			System.out.println("Done receiving the raw data creating matrix..");
+			System.out.println("[DataListener] Done receiving the raw data creating matrix..");
+			createMatrix();
+		}
+	}
+	
+	/**
+	 * Creates a two-dimensional overview of the board from a one-dimensional array
+	 */
+	private void createMatrix() {
+		int square = 0;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				boardData[i][j] = boardRawData[square];
+				square++;
+			}
 		}
 		
+		// print out the matrix for now
+		for (int x = 0; x < 8; x++) {
+			System.out.print("[");
+			for (int y = 0; y < 8; y++) {
+				System.out.println("[" + boardData[x][y] + "],");
+			}
+			System.out.print("]\n");
+		}
 	}
 }
 
