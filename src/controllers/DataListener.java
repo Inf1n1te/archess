@@ -112,8 +112,6 @@ public class DataListener extends Thread {
 			System.out.println("[DataListener] Done receiving the raw data creating matrix..");
 			createMatrix();
 		}
-		
-		dataReceived();
 	}
 	
 	/**
@@ -128,23 +126,16 @@ public class DataListener extends Thread {
 			}
 		}
 		
-		// print out the matrix for now
-		for (int x = 0; x < 8; x++) {
-			System.out.print("[");
-			for (int y = 0; y < 8; y++) {
-				System.out.print("[" + boardData[x][y] + "],");
-			}
-			System.out.print("]\n");
-		} 
+		dataReceived(boardData);
 	}
 	
 	public void register(DataController controller) {
 		receiver = controller;
 	}
 	
-    private void dataReceived(){
+    private void dataReceived(int[][] boardData){
     	System.out.println("Trying to call dataReceived()");
-    	receiver.onDataReceived();
+    	receiver.onDataReceived(boardData);
     }
 }
 
