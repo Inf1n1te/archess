@@ -38,6 +38,9 @@ public class DataController implements ActionListener {
 		JButton clickedButton = (JButton) ae.getSource();
 		if (clickedButton.getName().equals("startListener")) {
 			System.out.println("[DataController] startListener has been pushed, booting up DataListener..");
+			listener = new DataListener();
+			listener.register(this);
+			listener.start();
 		}
 	}
 	

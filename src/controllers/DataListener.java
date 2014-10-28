@@ -6,7 +6,7 @@ import com.pi4j.wiringpi.GpioInterruptListener;
 import com.pi4j.wiringpi.GpioInterruptEvent;
 import com.pi4j.wiringpi.GpioUtil;
 
-public class DataListener {
+public class DataListener extends Thread {
     
 	// keep track of state of received data
 	private boolean receivingData;
@@ -24,8 +24,10 @@ public class DataListener {
 		 boardRawData = new int[64];
 		 boardData = new int[8][8];
 		 System.out.println("[DataListener] Initialized empty board..");
-		 
-        // create and add GPIO listener 
+	}
+	
+	public void run() {
+		 // create and add GPIO listener 
         GpioInterrupt.addListener(new GpioInterruptListener() {
             @Override
             public void pinStateChange(GpioInterruptEvent event) {
@@ -73,7 +75,7 @@ public class DataListener {
 				e.printStackTrace();
 			}
         }
-	}
+    }
 	
 	/**
 	 * Parses the data from individual ints to bytes by first appending the ints
