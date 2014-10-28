@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.swing.plaf.SliderUI;
+
 import utils.Piece;
 import utils.TempPiece;
 
@@ -170,6 +172,7 @@ public class Board {
 		oldBoard = newBoard;
 		lastMove = new Move(this);
 		newBoard = lastMove.getNewBoard();
+		slain = lastMove.getSlainPieces();
 	}
 
 	/**
