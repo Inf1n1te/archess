@@ -39,7 +39,12 @@ public class DataController implements ActionListener {
 		if (clickedButton.getName().equals("startListener")) {
 			System.out.println("[DataController] startListener has been pushed, booting up DataListener..");
 			listener = new DataListener();
+			listener.register(this);
 		}
+	}
+	
+	public void onDataReceived() {
+		System.out.println("[DataController] Data has been received by the listener");
 	}
 
 }
