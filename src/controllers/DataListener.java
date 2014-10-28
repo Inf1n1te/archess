@@ -29,10 +29,6 @@ public class DataListener {
                 	if (event.getState()) {
 				
 			} else {	
-				if (!receivingData) {
-					System.out.println("[DataListener] Start receiving data..");
-					receivedSquares = 0;
-				}
 				readData();
 			}
 		}
@@ -73,16 +69,14 @@ public class DataListener {
 	 * and after that casting it to byte with parse int radix 2
 	 */
 	private void readData() {
-		System.out.println("[Interrupt] Clock is falling going to handle the data.");
-		System.out.println("Pin 1: " + Gpio.digitalRead(1));
-		System.out.println("Pin 2: " + Gpio.digitalRead(2));
-		System.out.println("Pin 3: " + Gpio.digitalRead(3));			
-		System.out.println("Pin 4: " + Gpio.digitalRead(4));
-		System.out.println("Pin 5: " + Gpio.digitalRead(5));
-		System.out.println("Pin 6: " + Gpio.digitalRead(6));
-		System.out.println("Pin 7: " + Gpio.digitalRead(7));
-		System.out.println("Pin 8: " + Gpio.digitalRead(8));
+		if (!receivingData) {
+			System.out.println("[DataListener] Start receiving data..");
+			receivedSquares = 0;
+		}
 		
+		System.out.println("[Interrupt] Clock is falling going to handle the data.");
+		System.out.println("Pin values: " + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(7) + Gpio.digitalRead(8));
+		System.out.println("[DataListener] Receiving square: " + receivedSquares + " + 2");
 		// parse the first square 
 		String firstBits = "0000" + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4);
 		int firstInt = Integer.parseInt(firstBits, 2);
