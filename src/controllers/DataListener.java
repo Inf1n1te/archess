@@ -13,7 +13,7 @@ public class DataListener {
 	private int receivedSquares;
 	private int[] boardRawData;
 	private int[][] boardData;
-	private DataReceiver receiver;
+	private DataController receiver;
 	
 	/**
 	 * The data listener is constantly waiting for an interrupt on pin 0 (falling edge)
@@ -111,7 +111,6 @@ public class DataListener {
 			createMatrix();
 		}
 		
-		System.out.println("Trying to call dataReceived()");
 		dataReceived();
 	}
 	
@@ -142,13 +141,8 @@ public class DataListener {
 	}
 	
     private void dataReceived(){
+    	System.out.println("Trying to call dataReceived()");
     	receiver.onDataReceived();
     }
-	
-	/** interface for callbacks
-	 */
-	public interface DataReceiver {
-		void onDataReceived();
-	}
 }
 

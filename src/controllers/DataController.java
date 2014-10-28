@@ -5,10 +5,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import controllers.DataListener.DataReceiver;
 import views.GuiView;
 
-public class DataController implements ActionListener, DataReceiver {
+public class DataController implements ActionListener {
 
 	// data controller has an GuiView and DataListener
 	private GuiView view;
@@ -43,8 +42,7 @@ public class DataController implements ActionListener, DataReceiver {
 			listener.register(this);
 		}
 	}
-
-	@Override
+	
 	public void onDataReceived() {
 		System.out.println("[DataController] Data has been received by the listener");
 	}
