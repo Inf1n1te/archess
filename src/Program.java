@@ -6,6 +6,8 @@ public class Program {
 
 	public static void main(String[] args) {
 		DataController controller = new DataController();
+		DataListener listener = new DataListener();
+		listener.register(controller);
 	}
 
 }
