@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import utils.MoveType;
 import utils.Piece;
 import utils.TempPiece;
@@ -207,6 +209,15 @@ public class Move {
 	 */
 	public boolean isValid() {
 		return isValid;
+	}
+
+	/**
+	 * Gets the slain pieces array list from the board.
+	 * 
+	 * @return ArrayList of Piece with the slain pieces
+	 */
+	public ArrayList<Piece> getSlainPieces() {
+		return board.getSlain();
 	}
 
 }
