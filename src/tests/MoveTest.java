@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import model.Board;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -10,11 +12,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-@RunWith(Suite.class)
-public class BoardTest {
+import utils.TempPiece;
 
+import java.lang.reflect.Method;
+
+@RunWith(Suite.class)
+public class MoveTest {
+	
+	Board board;
+	TempPiece[][] initTempBoard;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+//		initTempBoard;
 	}
 
 	@AfterClass
@@ -23,6 +33,7 @@ public class BoardTest {
 
 	@Before
 	public void setUp() throws Exception {
+//		board = new Board();
 	}
 
 	@After
@@ -30,17 +41,12 @@ public class BoardTest {
 	}
 
 	@Test
-	public final void testBoard() {
+	public final void testMove() {
 		fail("Not yet implemented"); // TODO
 	}
 
 	@Test
-	public final void testNewTurn() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public final void testSetField() {
+	public final void testIsValid() {
 		fail("Not yet implemented"); // TODO
 	}
 
