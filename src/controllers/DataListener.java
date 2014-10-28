@@ -30,7 +30,7 @@ public class DataListener {
             @Override
             public void pinStateChange(GpioInterruptEvent event) {
                 	if (event.getState()) {
-				
+                		System.out.println("Triggered rising edge");
                 	} else {	
                 		readData();
 			}
@@ -126,14 +126,14 @@ public class DataListener {
 			}
 		}
 		
-		/* print out the matrix for now
+		// print out the matrix for now
 		for (int x = 0; x < 8; x++) {
 			System.out.print("[");
 			for (int y = 0; y < 8; y++) {
 				System.out.print("[" + boardData[x][y] + "],");
 			}
 			System.out.print("]\n");
-		} */
+		} 
 	}
 	
 	public void register(DataController controller) {
