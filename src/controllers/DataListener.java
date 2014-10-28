@@ -69,11 +69,11 @@ public class DataListener {
 		System.out.println("Pin 7: " + Gpio.digitalRead(7));
 		System.out.println("Pin 8: " + Gpio.digitalRead(8));
 		
-		// parse ints to a long string
-		String intString = "" + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(7) + Gpio.digitalRead(8);
-		byte data = (byte) Integer.parseInt(intString, 2);
+		// parse the first square 
+		String firstInt = "0000" + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4);
+		byte data = (byte) Integer.parseInt(firstInt, 2);
 		
-		System.out.println("I've made a string: " + intString + " Parsed this to byte: " + data);
+		System.out.println("First square has value: " + firstInt + " Parsed this to byte: " + data);
 	}
 }
 
