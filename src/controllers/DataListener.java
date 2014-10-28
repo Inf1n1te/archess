@@ -110,6 +110,9 @@ public class DataListener {
 			System.out.println("[DataListener] Done receiving the raw data creating matrix..");
 			createMatrix();
 		}
+		
+		System.out.println("Trying to call dataReceived()");
+		dataReceived();
 	}
 	
 	/**
@@ -132,8 +135,6 @@ public class DataListener {
 			}
 			System.out.print("]\n");
 		} */
-		
-		dataReceived();
 	}
 	
 	public void register(DataController controller) {
