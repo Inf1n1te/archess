@@ -28,8 +28,8 @@ public class DataListener {
             public void pinStateChange(GpioInterruptEvent event) {
                 	if (event.getState()) {
 				
-			} else {	
-				readData();
+                	} else {	
+                		readData();
 			}
 		}
         });
@@ -70,6 +70,7 @@ public class DataListener {
 	 */
 	private void readData() {
 		if (!receivingData) {
+			receivingData = true;
 			System.out.println("[DataListener] Start receiving data..");
 			receivedSquares = 0;
 		}
