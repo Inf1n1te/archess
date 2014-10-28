@@ -270,4 +270,13 @@ public class Board {
 		this.slain = slain;
 	}
 
+	/**
+	 * Gets the last move.
+	 * 
+	 * @return Move lastMove
+	 */
+	public Move getMove() {
+		return lastMove;
+	}
+
 }
