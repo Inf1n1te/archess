@@ -20,18 +20,18 @@ public class Board {
 	private final Piece[][] INIT_WHITE = new Piece[][] {
 			new Piece[] { Piece.WHITE_ROOK, Piece.WHITE_PAWN, null, null, null,
 					null, Piece.BLACK_PAWN, Piece.BLACK_ROOK },
-			new Piece[] { Piece.WHITE_KNIGHT, Piece.WHITE_PAWN, null, null, null,
-					null, Piece.BLACK_PAWN, Piece.BLACK_KNIGHT },
-			new Piece[] { Piece.WHITE_BISHOP, Piece.WHITE_PAWN, null, null, null,
-					null, Piece.BLACK_PAWN, Piece.BLACK_BISHOP },
-			new Piece[] { Piece.WHITE_QUEEN, Piece.WHITE_PAWN, null, null, null,
-					null, Piece.BLACK_PAWN, Piece.BLACK_QUEEN },
+			new Piece[] { Piece.WHITE_KNIGHT, Piece.WHITE_PAWN, null, null,
+					null, null, Piece.BLACK_PAWN, Piece.BLACK_KNIGHT },
+			new Piece[] { Piece.WHITE_BISHOP, Piece.WHITE_PAWN, null, null,
+					null, null, Piece.BLACK_PAWN, Piece.BLACK_BISHOP },
+			new Piece[] { Piece.WHITE_QUEEN, Piece.WHITE_PAWN, null, null,
+					null, null, Piece.BLACK_PAWN, Piece.BLACK_QUEEN },
 			new Piece[] { Piece.WHITE_KING, Piece.WHITE_PAWN, null, null, null,
 					null, Piece.BLACK_PAWN, Piece.BLACK_KING },
-			new Piece[] { Piece.WHITE_BISHOP, Piece.WHITE_PAWN, null, null, null,
-					null, Piece.BLACK_PAWN, Piece.BLACK_BISHOP },
-			new Piece[] { Piece.WHITE_KNIGHT, Piece.WHITE_PAWN, null, null, null,
-					null, Piece.BLACK_PAWN, Piece.BLACK_KNIGHT },
+			new Piece[] { Piece.WHITE_BISHOP, Piece.WHITE_PAWN, null, null,
+					null, null, Piece.BLACK_PAWN, Piece.BLACK_BISHOP },
+			new Piece[] { Piece.WHITE_KNIGHT, Piece.WHITE_PAWN, null, null,
+					null, null, Piece.BLACK_PAWN, Piece.BLACK_KNIGHT },
 			new Piece[] { Piece.WHITE_ROOK, Piece.WHITE_PAWN, null, null, null,
 					null, Piece.BLACK_PAWN, Piece.BLACK_ROOK } };
 	/**
@@ -40,18 +40,18 @@ public class Board {
 	private final Piece[][] INIT_BLACK = new Piece[][] {
 			new Piece[] { Piece.BLACK_ROOK, Piece.BLACK_PAWN, null, null, null,
 					null, Piece.WHITE_PAWN, Piece.WHITE_ROOK },
-			new Piece[] { Piece.BLACK_KNIGHT, Piece.BLACK_PAWN, null, null, null,
-					null, Piece.WHITE_PAWN, Piece.WHITE_KNIGHT },
-			new Piece[] { Piece.BLACK_BISHOP, Piece.BLACK_PAWN, null, null, null,
-					null, Piece.WHITE_PAWN, Piece.WHITE_BISHOP },
+			new Piece[] { Piece.BLACK_KNIGHT, Piece.BLACK_PAWN, null, null,
+					null, null, Piece.WHITE_PAWN, Piece.WHITE_KNIGHT },
+			new Piece[] { Piece.BLACK_BISHOP, Piece.BLACK_PAWN, null, null,
+					null, null, Piece.WHITE_PAWN, Piece.WHITE_BISHOP },
 			new Piece[] { Piece.BLACK_KING, Piece.BLACK_PAWN, null, null, null,
 					null, Piece.WHITE_PAWN, Piece.WHITE_KING },
-			new Piece[] { Piece.BLACK_QUEEN, Piece.BLACK_PAWN, null, null, null,
-					null, Piece.WHITE_PAWN, Piece.WHITE_QUEEN },
-			new Piece[] { Piece.BLACK_BISHOP, Piece.BLACK_PAWN, null, null, null,
-					null, Piece.WHITE_PAWN, Piece.WHITE_BISHOP },
-			new Piece[] { Piece.BLACK_KNIGHT, Piece.BLACK_PAWN, null, null, null,
-					null, Piece.WHITE_PAWN, Piece.WHITE_KNIGHT },
+			new Piece[] { Piece.BLACK_QUEEN, Piece.BLACK_PAWN, null, null,
+					null, null, Piece.WHITE_PAWN, Piece.WHITE_QUEEN },
+			new Piece[] { Piece.BLACK_BISHOP, Piece.BLACK_PAWN, null, null,
+					null, null, Piece.WHITE_PAWN, Piece.WHITE_BISHOP },
+			new Piece[] { Piece.BLACK_KNIGHT, Piece.BLACK_PAWN, null, null,
+					null, null, Piece.WHITE_PAWN, Piece.WHITE_KNIGHT },
 			new Piece[] { Piece.BLACK_ROOK, Piece.BLACK_PAWN, null, null, null,
 					null, Piece.WHITE_PAWN, Piece.WHITE_ROOK } };
 	private TempPiece[][] tempBoard = new TempPiece[8][8];
@@ -93,6 +93,10 @@ public class Board {
 	 * False until the white king moves. Used for castling validation.
 	 */
 	private boolean whiteKingMoved;
+	/**
+	 * The last move made.
+	 */
+	private Move lastMove;
 
 	/**
 	 * Constructor for the board. Requires a raw board as input. It will then
@@ -155,9 +159,17 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Function that handles the board and move of a new turn.
+	 * 
+	 * @param rawBoard
+	 *            The raw input for a board
+	 */
 	public void newTurn(Byte[] rawBoard) {
 		createTempBoard(rawBoard);
 		oldBoard = newBoard;
+		lastMove = new Move(this);
+		newBoard = lastMove.getNewBoard();
 	}
 
 	/**

@@ -70,11 +70,15 @@ public class Move {
 		getMove();
 
 		// TODO Validation
-		
+
 		// Building the new board for screen output
 		updateBoard();
 	}
-	
+
+	/**
+	 * Update the newBoard field of the board with the updated values from this
+	 * move.
+	 */
 	private void updateBoard() {
 		board.setField(oldCoords, null);
 		board.setField(newCoords, movedPiece);
@@ -90,15 +94,23 @@ public class Move {
 			// TODO
 			break;
 		default:
-			System.err.println("Something went wrong with the updating of the board @Move.updateBoard");
+			System.err
+					.println("Something went wrong with the updating of the board @Move.updateBoard");
 			break;
 		}
 	}
-	
-	private void isValid() {
+
+	/**
+	 * Determine if the move is valid and set the validity.
+	 */
+	private void determineValidity() {
 		// TODO
 	}
 
+	/**
+	 * Determine and set the values for the fields needed for the current
+	 * moveType.
+	 */
 	private void getMove() {
 		// Loading the old board
 		Piece[][] oldBoard = board.getOldBoard();
@@ -178,5 +190,23 @@ public class Move {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * Gets the newBoard field from board.
+	 * 
+	 * @return A Piece[][] of the board
+	 */
+	public Piece[][] getNewBoard() {
+		return board.getNewBoard();
+	}
+
+	/**
+	 * Returns the validity of the current move.
+	 * 
+	 * @return Boolean with the validity
+	 */
+	public boolean isValid() {
+		return isValid;
+	}
+
 }
