@@ -44,12 +44,12 @@ public class DataListener {
         }
 
         // set the edge state on the pins we will be listening for
-        GpioUtil.setEdgeDetection(16, GpioUtil.EDGE_BOTH);
+        GpioUtil.setEdgeDetection(17, GpioUtil.EDGE_BOTH);
 
         // configure GPIO 0 as an INPUT pin; enable it for callbacks
-        Gpio.pinMode(16, Gpio.INPUT);
-        Gpio.pullUpDnControl(16, Gpio.PUD_DOWN);        
-        GpioInterrupt.enablePinStateChangeCallback(16);
+        Gpio.pinMode(17, Gpio.INPUT);
+        Gpio.pullUpDnControl(17, Gpio.PUD_DOWN);        
+        GpioInterrupt.enablePinStateChangeCallback(17);
         
         //########################################################
         //set all the other pins to input pins
