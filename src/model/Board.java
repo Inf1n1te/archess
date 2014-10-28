@@ -56,6 +56,11 @@ public class Board {
 					null, null, Piece.WHITE_PAWN, Piece.WHITE_KNIGHT },
 			new Piece[] { Piece.BLACK_ROOK, Piece.BLACK_PAWN, null, null, null,
 					null, Piece.WHITE_PAWN, Piece.WHITE_ROOK } };
+	/**
+	 * Temporary board used as a bridge between the old and the new board.
+	 * Required for figuring out what actually happened before pushing those
+	 * changes.
+	 */
 	private TempPiece[][] tempBoard = new TempPiece[8][8];
 	/**
 	 * The position of all the pieces on the old board. Format: board[0][0] is
@@ -212,7 +217,7 @@ public class Board {
 	 * @param tempBoard
 	 *            The TempPiece[] to which the temporary board will be set
 	 */
-	private void setTempBoard(TempPiece[][] tempBoard) {
+	public void setTempBoard(TempPiece[][] tempBoard) {
 		this.tempBoard = tempBoard;
 	}
 
@@ -231,7 +236,7 @@ public class Board {
 	 * @param newBoard
 	 *            The new board
 	 */
-	private void setNewBoard(Piece[][] newBoard) {
+	public void setNewBoard(Piece[][] newBoard) {
 		this.newBoard = newBoard;
 	}
 
@@ -250,7 +255,7 @@ public class Board {
 	 * @param oldBoard
 	 *            The old board
 	 */
-	private void setOldBoard(Piece[][] oldBoard) {
+	public void setOldBoard(Piece[][] oldBoard) {
 		this.oldBoard = oldBoard;
 	}
 
@@ -269,7 +274,7 @@ public class Board {
 	 * @param slain
 	 *            The ArrayList to which the slain pieces will be set
 	 */
-	private void setSlain(ArrayList<Piece> slain) {
+	public void setSlain(ArrayList<Piece> slain) {
 		this.slain = slain;
 	}
 
