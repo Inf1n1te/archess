@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import model.Board;
+import utils.MoveType;
 import utils.Piece;
 import views.GuiView;
 
@@ -82,6 +83,30 @@ public class DataController implements ActionListener {
 								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
 						);
 			
+			} else if (test == 2) {
+				listener.sampleData(
+						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+								new int[] { 1, 1, 1, 0, 0, 2, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
+						);
+			
+			} else if (test == 3) {
+				listener.sampleData(
+						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+								new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 1, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
+						);
+			
 			}
 			test++;
 		}
@@ -93,7 +118,7 @@ public class DataController implements ActionListener {
 	 * @param boardData the int[][] matrix
 	 */
 	public void onDataReceived(int[][] boardData) {
-		System.out.println("[DataController] Data has been received by the listener");
+		view.addMessage("[DataController] Data has been received by the listener");
 		
 		// if the boad has not been initiliazed yet
 		if (board == null) {
@@ -107,6 +132,7 @@ public class DataController implements ActionListener {
 				}
 				view.addMessage("\n");
 			} 
+			addHistory();
 		}
 		
 		// print out the matrix for now
@@ -127,5 +153,20 @@ public class DataController implements ActionListener {
 	public void addMessage(String message) {
 		view.addMessage(message);
 	}
+	
+	/** gives information to the history view to add
+	 */
+	public void addHistory() {
+		if (board.getMove().getMoveType() == MoveType.SLAYING) {
+			view.addHistory("[" + board.getMove().getMovedPieces()[0] + "] (" +
+					board.getMove().getOldCoords()[0][0] + "," + board.getMove().getOldCoords()[0][1] + ") > (" +
+					board.getMove().getNewCoords()[0][0] + "," + board.getMove().getNewCoords()[0][1] + ") \n has slain [" + 
+					 "slain" + "]\n");
+		} else {
+			view.addHistory("[" + board.getMove().getMovedPieces()[0] + "] (" +
+					board.getMove().getOldCoords()[0][0] + "," + board.getMove().getOldCoords()[0][1] + ") > (" +
+					board.getMove().getNewCoords()[0][0] + "," + board.getMove().getNewCoords()[0][1] + ")\n");
+		}
+	} 
 
 }

@@ -19,7 +19,7 @@ public class GuiView {
 	// all the necessary components
 	private JPanel history, board;
 	private JButton startListener, simulator;
-	private JTextArea textArea;
+	private JTextArea textArea, historyArea;
 	
 	/**
 	 * Create a new window with components [history], [board]
@@ -55,8 +55,8 @@ public class GuiView {
 		
 		window.add(startListener, "width 50%, height 30px, split 2");
 		window.add(simulator, "width 50%, height 30px, wrap");
-		window.add(scrollPane, "width 100%, height 500px, wrap");
-		window.add(history, "width 100%, wrap");
+		window.add(history, "width 30%, split 2");
+		window.add(scrollPane, "width 70%, height 500px, wrap");
 		window.add(board, "width 100%");
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -70,18 +70,32 @@ public class GuiView {
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 	
+	/** 
+	 * Adds a history to the history field
+	 */
+	public void addHistory(String historyText) {
+		historyArea.append(historyText);
+		historyArea.setCaretPosition(historyArea.getDocument().getLength());
+	}
+	
 	/**
 	 * Creates a panel and initializes everything needed to display history
 	 * @return A history panel, with all the needed components.
 	 */
 	private JPanel createHistoryView() {
 		JPanel history = new JPanel(new MigLayout());
-		history.setBackground(Color.GRAY);
+		history.setBackground(Color.LIGHT_GRAY);
 		
 		// elements in history panel
 		JLabel historyLabel = new JLabel("History");
-		history.add(historyLabel);
 		
+		// history textarea
+		historyArea = new JTextArea(5, 20);
+		JScrollPane scrollPane = new JScrollPane(historyArea); 
+		historyArea.setEditable(false);
+		
+		history.add(historyLabel, "width 100%, wrap, height 20px");
+		history.add(historyArea, "width 100%, height 480px");
 		return history;
 	}
 	

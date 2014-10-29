@@ -188,7 +188,7 @@ public class Move {
 		} else if (tempPiece == TempPiece.WHITE && piece != null
 				&& piece.toString().contains("WHITE")) {
 			return true;
-		} else if (tempPiece == TempPiece.BLACK
+		} else if (tempPiece == TempPiece.BLACK && piece != null
 				&& piece.toString().contains("BLACK")) {
 			return true;
 		} else {
