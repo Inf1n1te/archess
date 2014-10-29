@@ -84,6 +84,7 @@ public class Move {
 	private void updateBoard() {
 		board.setField(oldCoords, null);
 		board.setField(newCoords, movedPiece);
+		System.out.println("moveType: " + moveType);
 		switch (moveType) {
 		case REGULAR:
 			break;
