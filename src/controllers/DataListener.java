@@ -50,7 +50,7 @@ public class DataListener extends Thread {
 
         // configure GPIO 0 as an INPUT pin; enable it for callbacks
         Gpio.pinMode(7, Gpio.INPUT);
-        Gpio.pullUpDnControl(7, Gpio.PUD_DOWN);        
+        //Gpio.pullUpDnControl(7, Gpio.PUD_DOWN);        
         GpioInterrupt.enablePinStateChangeCallback(7);
         
         //########################################################
