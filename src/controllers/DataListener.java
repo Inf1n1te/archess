@@ -23,7 +23,7 @@ public class DataListener extends Thread {
 		 System.out.println("[DataListener] Booting up...");
 		 boardRawData = new int[64];
 		 boardData = new int[8][8];
-		 System.out.println("[DataListener] Initialized empty board..");
+		 System.out.println("[DataListener] Initialized empty board, pull up..");
 	}
 	
 	public void run() {
@@ -48,7 +48,7 @@ public class DataListener extends Thread {
         // set the edge state on the pins we will be listening for
         GpioUtil.setEdgeDetection(7, GpioUtil.EDGE_BOTH);
 
-        // configure GPIO 0 as an INPUT pin; enable it for callbacks
+        // configure GPIO 7 as an INPUT pin; enable it for callbacks
         Gpio.pinMode(7, Gpio.INPUT);
         //Gpio.pullUpDnControl(7, Gpio.PUD_DOWN);        
         GpioInterrupt.enablePinStateChangeCallback(7);
@@ -88,8 +88,8 @@ public class DataListener extends Thread {
 			receivedSquares = 0;
 		}
 		
-		System.out.println("[Interrupt] Clock is falling going to handle the data.");
-		System.out.println("[DataListener] Pin values: " + Gpio.digitalRead(17) + Gpio.digitalRead(18) + Gpio.digitalRead(19) + Gpio.digitalRead(20) + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3));
+		receiver.addMessage("[Interrupt] Clock is falling going to handle the data. \n");
+		receiver.addMessage("[DataListener] Pin values: " + Gpio.digitalRead(17) + Gpio.digitalRead(18) + Gpio.digitalRead(19) + Gpio.digitalRead(20) + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + "\n");
 		System.out.println("[DataListener] Receiving square: " + receivedSquares + " + 2");
 		// parse the first square 
 		String firstBits = "0000" + Gpio.digitalRead(17) + Gpio.digitalRead(18) + Gpio.digitalRead(19) + Gpio.digitalRead(20);

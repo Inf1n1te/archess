@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import controllers.DataController;
@@ -15,8 +17,9 @@ import net.miginfocom.swing.MigLayout;
 public class GuiView {
 
 	// all the necessary components
-	JPanel history, board;
+	private JPanel history, board;
 	private JButton startListener, simulator;
+	private JTextArea textArea;
 	
 	/**
 	 * Create a new window with components [history], [board]
@@ -43,12 +46,28 @@ public class GuiView {
 		simulator = new JButton("Simulate move");
 		simulator.setName("simulator");
 		
-		window.add(startListener, "width 50%, height 30px");
-		window.add(simulator, "width 50%, height 30px");
-		window.add(history, "width 25%");
-		window.add(board, "width 75%");
+		// console
+		textArea = new JTextArea(5, 20);
+		JScrollPane scrollPane = new JScrollPane(textArea); 
+		textArea.setEditable(false);
+		
+		textArea.append("[Console] Hello i'm your visual assist.\n");
+		
+		window.add(startListener, "width 50%, height 30px, split 2");
+		window.add(simulator, "width 50%, height 30px, wrap");
+		window.add(scrollPane, "width 100%, height 500px, wrap");
+		window.add(history, "width 100%, wrap");
+		window.add(board, "width 100%");
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setVisible(true);
+	}
+	
+	/**
+	 * Adds a message to the console
+	 */
+	public void addMessage(String message) {
+		textArea.append(message);
+		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 	
 	/**

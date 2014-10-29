@@ -18,7 +18,7 @@ public class DataController implements ActionListener {
 	
 	// controller has control over board
 	private Board board;
-	private boolean boardInit;
+	private int test;
 	
 	/**
 	 * Instantiates the view
@@ -27,12 +27,12 @@ public class DataController implements ActionListener {
 		System.out.println("[DataController] DataController has started..");
 		view = new GuiView();
 		System.out.println("[DataController] Booted up the view");
-		boardInit = false;
 		// add the actionListeners on view
 		addActionListeners(this);
 		listenerBooted = false;
 		listener = new DataListener();
 		listener.register(this);
+		test = 0;
 	}
 	
 	/** 
@@ -45,16 +45,45 @@ public class DataController implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		System.out.println("[DataController] Action has been performed..");
+		view.addMessage("[DataController] An action has been performed.\n");
 		JButton clickedButton = (JButton) ae.getSource();
 		if (clickedButton.getName().equals("startListener")) {
 			if (!listenerBooted) {
-				System.out.println("[DataController] startListener has been pushed, running DataListener..");
+				view.addMessage("[DataController] startListener has been pushed, running DataListener.\n");
 				listener.start();
 				listenerBooted = true;
 			}
 		} else if (clickedButton.getName().equals("simulator")) {
-			System.out.println("[DataController] Simulating a move");
+			view.addMessage("[DataController] Simulating a move.\n");
+			
+			if (test == 0) {
+			
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
+					);
+			
+			
+			} else if (test == 1) {
+				listener.sampleData(
+						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 0, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 1, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
+						);
+			
+			}
+			test++;
 		}
 	}
 	
@@ -67,24 +96,36 @@ public class DataController implements ActionListener {
 		System.out.println("[DataController] Data has been received by the listener");
 		
 		// if the boad has not been initiliazed yet
-		if (!boardInit) {
+		if (board == null) {
 			board = new Board(boardData);
 		} else {
 			board.newTurn(boardData);
 			Piece[][] pieces = board.getNewBoard();
-			System.out.println(pieces[2][2]);
+			for (int x = 7; x >= 0; x--) {
+				for (int y = 0; y < 8; y++) {
+					view.addMessage("[" + pieces[y][x] + "]");
+				}
+				view.addMessage("\n");
+			} 
 		}
 		
 		// print out the matrix for now
-		for (int x = 0; x < 8; x++) {
-			System.out.print("[");
+		for (int x = 7; x >= 0; x--) {
 			for (int y = 0; y < 8; y++) {
-				System.out.print("[" + boardData[x][y] + "]");
+				view.addMessage("[" + boardData[y][x] + "]");
 			}
-			System.out.print("]\n");
+			view.addMessage("\n");
 		} 
 		
 		
+	}
+	
+	/** 
+	 * Commands the view to add a message
+	 * @param message message you want to append
+	 */
+	public void addMessage(String message) {
+		view.addMessage(message);
 	}
 
 }

@@ -182,7 +182,7 @@ public class Move {
 	private boolean tempFieldEquals(TempPiece tempPiece, Piece piece) {
 		if (tempPiece == TempPiece.EMPTY && piece == null) {
 			return true;
-		} else if (tempPiece == TempPiece.WHITE
+		} else if (tempPiece == TempPiece.WHITE && piece != null
 				&& piece.toString().contains("WHITE")) {
 			return true;
 		} else if (tempPiece == TempPiece.BLACK
