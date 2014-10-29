@@ -85,6 +85,8 @@ public class Move {
 		board.setField(oldCoords, null);
 		board.setField(newCoords, movedPiece);
 		switch (moveType) {
+		case REGULAR:
+			break;
 		case SLAYING:
 			board.addSlain(slainPiece);
 			break;
@@ -218,6 +220,10 @@ public class Move {
 	 */
 	public ArrayList<Piece> getSlainPieces() {
 		return board.getSlain();
+	}
+	
+	public int[] getNewCoords() {
+		return newCoords;
 	}
 
 }
