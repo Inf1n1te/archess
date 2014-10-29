@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import utils.MoveType;
 import utils.Piece;
@@ -217,9 +217,9 @@ public class Move {
 	/**
 	 * Gets the slain pieces array list from the board.
 	 * 
-	 * @return ArrayList of Piece with the slain pieces
+	 * @return LinkedList of Piece with the slain pieces
 	 */
-	public ArrayList<Piece> getSlainPieces() {
+	public LinkedList<Piece> getSlainPieces() {
 		return board.getSlain();
 	}
 
