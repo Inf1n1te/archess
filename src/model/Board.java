@@ -1,8 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-
-import javax.swing.plaf.SliderUI;
+import java.util.LinkedList;
 
 import utils.Piece;
 import utils.TempPiece;
@@ -73,9 +71,9 @@ public class Board {
 	 */
 	private Piece[][] newBoard = new Piece[8][8];
 	/**
-	 * An ArrayList containing all the slain pieces;
+	 * An LinkedList containing all the slain pieces;
 	 */
-	private ArrayList<Piece> slain = new ArrayList<Piece>();
+	private LinkedList<Piece> slain = new LinkedList<Piece>();
 	/**
 	 * False until the left black rook moves. Used for castling validation.
 	 */
@@ -264,7 +262,7 @@ public class Board {
 	 * 
 	 * @return The slain pieces.
 	 */
-	public ArrayList<Piece> getSlain() {
+	public LinkedList<Piece> getSlain() {
 		return slain;
 	}
 
@@ -272,9 +270,9 @@ public class Board {
 	 * Sets the slain pieces.
 	 * 
 	 * @param slain
-	 *            The ArrayList to which the slain pieces will be set
+	 *            The LinkedList to which the slain pieces will be set
 	 */
-	public void setSlain(ArrayList<Piece> slain) {
+	public void setSlain(LinkedList<Piece> slain) {
 		this.slain = slain;
 	}
 
