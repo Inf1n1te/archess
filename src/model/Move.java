@@ -68,8 +68,8 @@ public class Move {
 		this.board = board;
 
 		// Get the move
-		getMoveType();
-		getMove();
+		determineMoveType();
+		determineMove();
 
 		// TODO Validation
 
@@ -116,7 +116,7 @@ public class Move {
 	 * Determine and set the values for the fields needed for the current
 	 * moveType.
 	 */
-	private void getMove() {
+	private void determineMove() {
 		// Loading the old board
 		Piece[][] oldBoard = board.getOldBoard();
 
@@ -138,7 +138,7 @@ public class Move {
 	 * Determines the type of move (defined by the enum MoveType). And sets the
 	 * coords used for determining the exact move.
 	 */
-	private void getMoveType() {
+	private void determineMoveType() {
 		// Loading the boards that will be compared
 		TempPiece[][] tempBoard = board.getTempBoard();
 		Piece[][] oldBoard = board.getOldBoard();
@@ -222,9 +222,46 @@ public class Move {
 	public ArrayList<Piece> getSlainPieces() {
 		return board.getSlain();
 	}
-	
-	public int[] getNewCoords() {
-		return newCoords;
+
+	/**
+	 * Gets the old coords of all the moved pieces.
+	 * 
+	 * @return int[][], with the int[][0] being the x and int[][y] being the y.
+	 *         int[1][] is only used for castling
+	 */
+	public int[][] getNewCoords() {
+		int[][] value = new int[][] { newCoords, newCoordsCastling };
+		return value;
+	}
+
+	/**
+	 * Gets the new coords of all the moved pieces.
+	 * 
+	 * @return int[][], with the int[][0] being the x and int[][y] being the y.
+	 *         int[1][] is only used for castling
+	 */
+	public int[][] getOldCoords() {
+		int[][] value = new int[][] { oldCoords, oldCoordsCastling };
+		return value;
+	}
+
+	/**
+	 * Gets the move type of the this move.
+	 * 
+	 * @return MoveType
+	 */
+	public MoveType getMoveType() {
+		return moveType;
+	}
+
+	/**
+	 * Gets all the moved pieces.
+	 * 
+	 * @return Piece[], with Piece[1] only being used for castling
+	 */
+	public Piece[] getMovedPieces() {
+		Piece[] value = new Piece[] { movedPiece, movedPieceCastling };
+		return value;
 	}
 
 }
