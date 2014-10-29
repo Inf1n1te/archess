@@ -161,7 +161,7 @@ public class DataController implements ActionListener {
 			view.addHistory("[" + board.getMove().getMovedPieces()[0] + "] (" +
 					board.getMove().getOldCoords()[0][0] + "," + board.getMove().getOldCoords()[0][1] + ") > (" +
 					board.getMove().getNewCoords()[0][0] + "," + board.getMove().getNewCoords()[0][1] + ") \n has slain [" + 
-					 "slain" + "]\n");
+					 board.getMove().getSlainPieces().peekLast() + "]\n");
 		} else {
 			view.addHistory("[" + board.getMove().getMovedPieces()[0] + "] (" +
 					board.getMove().getOldCoords()[0][0] + "," + board.getMove().getOldCoords()[0][1] + ") > (" +
