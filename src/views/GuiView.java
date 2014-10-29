@@ -16,7 +16,7 @@ public class GuiView {
 
 	// all the necessary components
 	JPanel history, board;
-	private JButton startListener;
+	private JButton startListener, simulator;
 	
 	/**
 	 * Create a new window with components [history], [board]
@@ -36,10 +36,15 @@ public class GuiView {
 		board = createBoardView();
 		
 		// start button
-		startListener = new JButton("Start DataListener");
+		startListener = new JButton("Run DataListener (thread)");
 		startListener.setName("startListener");
 		
-		window.add(startListener, "width 100%, height 50px, span");
+		// simulate button
+		simulator = new JButton("Simulate move");
+		simulator.setName("simulator");
+		
+		window.add(startListener, "width 50%, height 30px");
+		window.add(simulator, "width 50%, height 30px");
 		window.add(history, "width 25%");
 		window.add(board, "width 75%");
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -81,5 +86,6 @@ public class GuiView {
 	 */
 	public void addActionListeners(DataController ae) {
 		startListener.addActionListener(ae);
+		simulator.addActionListener(ae);
 	}
 }

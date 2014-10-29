@@ -50,7 +50,7 @@ public class DataListener extends Thread {
 
         // configure GPIO 0 as an INPUT pin; enable it for callbacks
         Gpio.pinMode(7, Gpio.INPUT);
-        Gpio.pullUpDnControl(7, Gpio.PUD_DOWN);        
+        //Gpio.pullUpDnControl(7, Gpio.PUD_DOWN);        
         GpioInterrupt.enablePinStateChangeCallback(7);
         
         //########################################################
@@ -129,12 +129,27 @@ public class DataListener extends Thread {
 		dataReceived(boardData);
 	}
 	
+	/**
+	 * Registers the datacontroller as a listener on the data listener
+	 * @param controller , the instantiated datacontroller
+	 */
 	public void register(DataController controller) {
 		receiver = controller;
 	}
 	
+	/**
+	 * Called when the complete data about a board has been received
+	 * @param boardData contains the boarddata in int[][]
+	 */
     private void dataReceived(int[][] boardData){
     	System.out.println("Trying to call dataReceived()");
+    	receiver.onDataReceived(boardData);
+    }
+    
+    /** 
+     * Sample information that simulates data received by the listener
+     */
+    public void sampleData(int[][] boardData) {
     	receiver.onDataReceived(boardData);
     }
 }

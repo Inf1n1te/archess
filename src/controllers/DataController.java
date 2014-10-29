@@ -31,6 +31,8 @@ public class DataController implements ActionListener {
 		// add the actionListeners on view
 		addActionListeners(this);
 		listenerBooted = false;
+		listener = new DataListener();
+		listener.register(this);
 	}
 	
 	/** 
@@ -46,13 +48,13 @@ public class DataController implements ActionListener {
 		System.out.println("[DataController] Action has been performed..");
 		JButton clickedButton = (JButton) ae.getSource();
 		if (clickedButton.getName().equals("startListener")) {
-			System.out.println("[DataController] startListener has been pushed, booting up DataListener..");
 			if (!listenerBooted) {
-				listener = new DataListener();
-				listener.register(this);
+				System.out.println("[DataController] startListener has been pushed, running DataListener..");
 				listener.start();
 				listenerBooted = true;
 			}
+		} else if (clickedButton.getName().equals("simulator")) {
+			System.out.println("[DataController] Simulating a move");
 		}
 	}
 	
