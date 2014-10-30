@@ -71,10 +71,14 @@ public class Move {
 		determineMoveType();
 		determineMove();
 
-		// TODO Validation
+		// Initial validation
+		determineValidity();
 
 		// Building the new board for screen output
 		updateBoard();
+
+		// Post-move validation (is the active players king now under attack?)
+		determinePostValidity();
 	}
 
 	/**
@@ -96,7 +100,7 @@ public class Move {
 			board.setField(newCoordsCastling, movedPieceCastling);
 			break;
 		case PROMOTION:
-			// TODO
+			// TODO PROMOTION
 			break;
 		default:
 			System.err
@@ -105,11 +109,110 @@ public class Move {
 		}
 	}
 
+	// TODO Implement promotion validity
 	/**
 	 * Determine if the move is valid and set the validity.
 	 */
 	private void determineValidity() {
-		// TODO
+		// Checking if move is possible
+		if (moveType == MoveType.REGULAR) {
+			if (board.hasLOS(oldCoords, newCoords, movedPiece, moveType)
+					&& board.canMove(oldCoords, newCoords, movedPiece, moveType)) {
+				isValid = true;
+			}
+		} else if (moveType == MoveType.SLAYING) {
+			if (board.hasLOS(oldCoords, newCoords, movedPiece, moveType)
+					&& board.canMove(oldCoords, newCoords, movedPiece, moveType)
+					&& !slainPiece.toString().split("_")[0].equals(movedPiece
+							.toString().split("_")[0])) {
+				isValid = true;
+			}
+		} else if (moveType == MoveType.CASTLING && castlingChecks()) {
+			isValid = true;
+		} else if (moveType == MoveType.PROMOTION) {
+			System.err.println("Not yet implented @Move.determineValidity");
+			// TODO PROMOTION
+		} else {
+			isValid = false;
+		}
+	}
+
+	/**
+	 * Determine validity of the move after moving the actual pieces on the
+	 * board because of the king now being in check.
+	 */
+	private void determinePostValidity() {
+		// Checking if king is under attack after this move
+		if (movedPiece.toString().contains("WHITE")
+				&& board.isFieldUnderAttack(board.getKingField("WHITE"),
+						"BLACK")) {
+			isValid = false;
+		} else if (movedPiece.toString().contains("BLACK")
+				&& board.isFieldUnderAttack(board.getKingField("BLACK"),
+						"WHITE")) {
+			isValid = false;
+		}
+	}
+
+	/**
+	 * Checks for the castling validation.
+	 * 
+	 * @return boolean
+	 */
+	private boolean castlingChecks() {
+		// Movement checks
+		boolean value0 = false;
+		if (board.hasLOS(oldCoords, newCoords, movedPiece, moveType)
+				&& board.hasLOS(oldCoordsCastling, newCoordsCastling,
+						movedPieceCastling, moveType)
+				&& board.canMove(oldCoords, newCoords, movedPiece, moveType)
+				&& board.canMove(oldCoordsCastling, newCoordsCastling,
+						movedPieceCastling, moveType)) {
+			value0 = true;
+		}
+
+		// Have the pieces not moved? checks
+		boolean value1 = false;
+		if (movedPiece.toString().contains("WHITE")
+				&& !board.isWhiteKingMoved()
+				&& ((oldCoords[0] == 0 && !board.isLeftWhiteRookMoved()) || (oldCoords[0] == 7 && !board
+						.isRightWhiteRookMoved()))) {
+			value1 = true;
+		} else if (movedPiece.toString().contains("BLACK")
+				&& !board.isBlackKingMoved()
+				&& ((oldCoords[0] == 0 && !board.isLeftBlackRookMoved()) || (oldCoords[0] == 7 && !board
+						.isRightBlackRookMoved()))) {
+			value1 = true;
+		}
+
+		// Is the king not in check?
+		boolean value2 = false;
+		if (movedPiece.toString().contains("WHITE")
+				&& !board.isFieldUnderAttack(board.getKingField("WHITE"),
+						"BLACK")) {
+			value2 = true;
+		} else if (movedPiece.toString().contains("BLACK")
+				&& !board.isFieldUnderAttack(board.getKingField("BLACK"),
+						"WHITE")) {
+			value2 = true;
+		}
+
+		// Is the field through which the king passes not under attack?
+		boolean value3 = false;
+		int[] coords;
+		if (newCoords[0] <= 3) {
+			coords = new int[] { 3, newCoords[1] };
+		} else {
+			coords = new int[] { 5, newCoords[1] };
+		}
+		if ((!board.isFieldUnderAttack(coords, "BLACK") && movedPiece
+				.toString().contains("WHITE"))
+				|| (!board.isFieldUnderAttack(coords, "WHITE") && movedPiece
+						.toString().contains("BLACK"))) {
+			value3 = false;
+		}
+
+		return value0 && value1 && value2 && value3;
 	}
 
 	/**
@@ -120,7 +223,7 @@ public class Move {
 		// Loading the old board
 		Piece[][] oldBoard = board.getOldBoard();
 
-		// Determining the Move field
+		// Determining the Move fields
 		// Regular movement
 		movedPiece = oldBoard[oldCoords[0]][oldCoords[1]];
 		// Addition for slaying
@@ -151,7 +254,8 @@ public class Move {
 				if (!tempFieldEquals(tempBoard[i][j], oldBoard[i][j])) {
 
 					// Set the coords and movetype
-					// TODO implement promotion movetype (MoveType.PROMOTION)
+					// TODO implement promotion movetype (MoveType.PROMOTION).
+					// Requires more detailed raw board input.
 					if (tempBoard[i][j] == TempPiece.EMPTY && oldCoords == null) {
 						oldCoords = new int[] { i, j };
 					} else if (tempBoard[i][j] == TempPiece.EMPTY
