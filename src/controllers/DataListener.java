@@ -23,7 +23,7 @@ public class DataListener extends Thread {
 		 System.out.println("[DataListener] Booting up...");
 		 boardRawData = new int[64];
 		 boardData = new int[8][8];
-		 System.out.println("[DataListener] Initialized empty board, pull up..");
+		 System.out.println("[DataListener] Initialized empty board, pull up!!..");
 	}
 	
 	public void run() {
@@ -32,8 +32,9 @@ public class DataListener extends Thread {
             @Override
             public void pinStateChange(GpioInterruptEvent event) {
                 	if (event.getState()) {
-                		System.out.println("Triggered rising edge");
+                		//System.out.println("Triggered rising edge");
                 	} else {	
+                		//System.out.println("Falling edge");
                 		readData();
 			}
 		}
@@ -50,19 +51,19 @@ public class DataListener extends Thread {
 
         // configure GPIO 7 as an INPUT pin; enable it for callbacks
         Gpio.pinMode(7, Gpio.INPUT);
-        //Gpio.pullUpDnControl(7, Gpio.PUD_DOWN);        
+        Gpio.pullUpDnControl(7, Gpio.PUD_UP);        
         GpioInterrupt.enablePinStateChangeCallback(7);
         
         //########################################################
         //set all the other pins to input pins
-        Gpio.pinMode(17, Gpio.INPUT);
-        Gpio.pinMode(18, Gpio.INPUT);
-        Gpio.pinMode(19, Gpio.INPUT);
-        Gpio.pinMode(20, Gpio.INPUT);
         Gpio.pinMode(0, Gpio.INPUT);
         Gpio.pinMode(1, Gpio.INPUT);
         Gpio.pinMode(2, Gpio.INPUT);
-        Gpio.pinMode(37, Gpio.INPUT);
+        Gpio.pinMode(3, Gpio.INPUT);
+        Gpio.pinMode(4, Gpio.INPUT);
+        Gpio.pinMode(5, Gpio.INPUT);
+        Gpio.pinMode(6, Gpio.INPUT);
+        Gpio.pinMode(8, Gpio.INPUT);
         
         System.out.println("[DataListener] booted up succesfully..");
         
@@ -82,24 +83,25 @@ public class DataListener extends Thread {
 	 * and after that casting it to byte with parse int radix 2
 	 */
 	private void readData() {
+		
+		//receiver.addMessage("[Interrupt] Clock is falling going to handle the data. \n");
+		receiver.addMessage("[DataListener] Pin values: " + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(8) + "\n");
+		//System.out.println("[DataListener] Receiving square: " + receivedSquares + " + 2");
+		// parse the first square 
+		String firstBits = "0000" + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3);
+		int firstInt = Integer.parseInt(firstBits, 2);
+		
 		if (!receivingData) {
 			receivingData = true;
-			System.out.println("[DataListener] Start receiving data..");
+			//System.out.println("[DataListener] Start receiving data..");
 			receivedSquares = 0;
 		}
-		
-		receiver.addMessage("[Interrupt] Clock is falling going to handle the data. \n");
-		receiver.addMessage("[DataListener] Pin values: " + Gpio.digitalRead(17) + Gpio.digitalRead(18) + Gpio.digitalRead(19) + Gpio.digitalRead(20) + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + "\n");
-		System.out.println("[DataListener] Receiving square: " + receivedSquares + " + 2");
-		// parse the first square 
-		String firstBits = "0000" + Gpio.digitalRead(17) + Gpio.digitalRead(18) + Gpio.digitalRead(19) + Gpio.digitalRead(20);
-		int firstInt = Integer.parseInt(firstBits, 2);
 		
 		boardRawData[receivedSquares] = firstInt;
 		receivedSquares++;
 		
 		// parse the second square
-		String secondBits = "0000" + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3);
+		String secondBits = "0000" + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(8);
 		int secondInt = Integer.parseInt(secondBits, 2);
 		
 		boardRawData[receivedSquares] = secondInt;
