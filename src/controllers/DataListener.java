@@ -1,5 +1,13 @@
 package controllers;
 
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalInput;
+import com.pi4j.io.gpio.PinPullResistance;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
+import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.GpioInterrupt;
 import com.pi4j.wiringpi.GpioInterruptListener;
@@ -11,7 +19,8 @@ public class DataListener extends Thread {
 	// keep track of state of received data
 	private boolean receivingData;
 	private int receivedSquares;
-	private int[] boardRawData;
+	private int[] boardSquareData;
+	private int[][] boardRawData;
 	private int[][] boardData;
 	private DataController receiver;
 	
@@ -21,25 +30,38 @@ public class DataListener extends Thread {
 	 */
 	public DataListener() {
 		 System.out.println("[DataListener] Booting up...");
-		 boardRawData = new int[64];
+		 boardRawData = new int[33][8];
 		 boardData = new int[8][8];
-		 System.out.println("[DataListener] Initialized empty board, pull up!!..");
+		 boardSquareData = new int[64];
+		 System.out.println("[DataListener] Initialized empty board, now ignoring first byte!!!..");
 	}
 	
 	public void run() {
-		 // create and add GPIO listener 
+		
+		// create and add GPIO listener 
         GpioInterrupt.addListener(new GpioInterruptListener() {
             @Override
             public void pinStateChange(GpioInterruptEvent event) {
-                	if (event.getState()) {
-                		//System.out.println("Triggered rising edge");
-                	} else {	
-                		//System.out.println("Falling edge");
-                		readData();
-			}
-		}
+            	if (!event.getState()) {
+            		boardRawData[receivedSquares][0] = Gpio.digitalRead(0);
+            		boardRawData[receivedSquares][1] = Gpio.digitalRead(1);
+            		boardRawData[receivedSquares][2] = Gpio.digitalRead(2);
+            		boardRawData[receivedSquares][3] = Gpio.digitalRead(3);
+            		boardRawData[receivedSquares][4] = Gpio.digitalRead(4);
+            		boardRawData[receivedSquares][5] = Gpio.digitalRead(5);
+            		boardRawData[receivedSquares][6] = Gpio.digitalRead(6);
+            		boardRawData[receivedSquares][7] = Gpio.digitalRead(8);
+            		receivedSquares++;
+            		
+            		if (receivedSquares == 33) {
+            			receivedSquares = 0;
+            			System.out.println("[DataListener] Done receiving the raw data creating matrix..");
+            			createMatrix();
+            		}
+            	}
+            }
         });
-        
+		
         // setup wiring pi
         if (Gpio.wiringPiSetup() == -1) {
             System.out.println("[Error] while setting up wiringpi");
@@ -48,7 +70,7 @@ public class DataListener extends Thread {
 
         // set the edge state on the pins we will be listening for
         GpioUtil.setEdgeDetection(7, GpioUtil.EDGE_BOTH);
-
+      
         // configure GPIO 7 as an INPUT pin; enable it for callbacks
         Gpio.pinMode(7, Gpio.INPUT);
         Gpio.pullUpDnControl(7, Gpio.PUD_UP);        
@@ -64,7 +86,7 @@ public class DataListener extends Thread {
         Gpio.pinMode(5, Gpio.INPUT);
         Gpio.pinMode(6, Gpio.INPUT);
         Gpio.pinMode(8, Gpio.INPUT);
-        
+
         System.out.println("[DataListener] booted up succesfully..");
         
         // continuously loop to prevent program from exiting
@@ -85,34 +107,66 @@ public class DataListener extends Thread {
 	private void readData() {
 		
 		//receiver.addMessage("[Interrupt] Clock is falling going to handle the data. \n");
-		receiver.addMessage("[DataListener] Pin values: " + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(8) + "\n");
+		//receiver.addMessage("[DataListener] Pin values: " + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3) + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(8) + "\n");
 		//System.out.println("[DataListener] Receiving square: " + receivedSquares + " + 2");
 		// parse the first square 
-		String firstBits = "0000" + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3);
-		int firstInt = Integer.parseInt(firstBits, 2);
+		//String firstBits = "0000" + Gpio.digitalRead(0) + Gpio.digitalRead(1) + Gpio.digitalRead(2) + Gpio.digitalRead(3);
+		//int firstInt = Integer.parseInt(firstBits, 2);
 		
-		if (!receivingData) {
+		// save the data
+		boardRawData[receivedSquares][0] = Gpio.digitalRead(0);
+		boardRawData[receivedSquares][1] = Gpio.digitalRead(1);
+		boardRawData[receivedSquares][2] = Gpio.digitalRead(2);
+		boardRawData[receivedSquares][3] = Gpio.digitalRead(3);
+		boardRawData[receivedSquares][4] = Gpio.digitalRead(4);
+		boardRawData[receivedSquares][5] = Gpio.digitalRead(5);
+		boardRawData[receivedSquares][6] = Gpio.digitalRead(6);
+		boardRawData[receivedSquares][7] = Gpio.digitalRead(8);
+		receivedSquares++;
+		//System.out.println(receivedSquares);
+		
+		/*if (!receivingData) {
 			receivingData = true;
 			//System.out.println("[DataListener] Start receiving data..");
 			receivedSquares = 0;
-		}
+		}*/
 		
-		boardRawData[receivedSquares] = firstInt;
-		receivedSquares++;
+		//boardRawData[receivedSquares] = firstInt;
+		//receivedSquares++;
 		
 		// parse the second square
-		String secondBits = "0000" + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(8);
-		int secondInt = Integer.parseInt(secondBits, 2);
+		//String secondBits = "0000" + Gpio.digitalRead(4) + Gpio.digitalRead(5) + Gpio.digitalRead(6) + Gpio.digitalRead(8);
+		//int secondInt = Integer.parseInt(secondBits, 2);
 		
-		boardRawData[receivedSquares] = secondInt;
-		receivedSquares++;
+		//boardRawData[receivedSquares] = secondInt;
+		//receivedSquares++;
 		
-		System.out.println("[DataListener] First square has value: " + firstInt + " Second square has value: " + secondInt);
+		//System.out.println("[DataListener] First square has value: " + firstInt + " Second square has value: " + secondInt);
 		
-		if (receivedSquares == 64) {
-			receivingData = false;
+		if (receivedSquares == 33) {
+			receivedSquares = 0;
 			System.out.println("[DataListener] Done receiving the raw data creating matrix..");
 			createMatrix();
+		}
+	}
+	
+	/**
+	 * Creates from the raw data square data
+	 */
+	private void createSquareData() {
+		int square = 0;
+		for (int b = 1; b < 33; b++) {
+			String firstBits = "" + boardRawData[b][0] + boardRawData[b][1] + boardRawData[b][2] + boardRawData[b][3];
+			String secondBits = "" + boardRawData[b][4] + boardRawData[b][5] + boardRawData[b][6] + boardRawData[b][7];
+			int firstInt = Integer.parseInt(firstBits, 2);
+			int secondInt = Integer.parseInt(secondBits, 2);
+			
+			System.out.println("Square: " + b + " en + 1 :" + firstBits + secondBits);
+			
+			boardSquareData[square] = firstInt;
+			square++;
+			boardSquareData[square] = secondInt;
+			square++;
 		}
 	}
 	
@@ -120,10 +174,11 @@ public class DataListener extends Thread {
 	 * Creates a two-dimensional overview of the board from a one-dimensional array
 	 */
 	private void createMatrix() {
+		createSquareData();
 		int square = 0;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				boardData[i][j] = boardRawData[square];
+				boardData[i][j] = boardSquareData[square];
 				square++;
 			}
 		}

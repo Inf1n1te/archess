@@ -1,6 +1,7 @@
 import views.GuiView;
 import controllers.DataController;
 import controllers.DataListener;
+import controllers.FasterListener;
 
 public class Program {
 

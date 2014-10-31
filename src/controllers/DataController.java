@@ -55,8 +55,8 @@ public class DataController implements ActionListener {
 				listenerBooted = true;
 			}
 		} else if (clickedButton.getName().equals("simulator")) {
-			view.addMessage("[DataController] Simulating a move.\n");
-			
+			//view.addMessage("[DataController] repainting\n");
+			//view.repaintWindow();
 			if (test == 0) {
 			
 			listener.sampleData(
@@ -107,8 +107,45 @@ public class DataController implements ActionListener {
 								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
 						);
 			
+			} else if (test == 4) {
+				listener.sampleData(
+						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+								new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 1 } }
+						);
+			
+			} else if (test == 5) {
+				listener.sampleData(
+						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+								new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 1, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 0 } }
+						);
+			
+			} else if (test == 6) {
+				listener.sampleData(
+						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+								new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 1, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+								new int[] { 1, 1, 0, 0, 0, 0, 2, 0 } }
+						);
+			
 			}
-			test++;
+			test++; 
+			//view.repaintWindow();
 		}
 	}
 	
@@ -118,7 +155,7 @@ public class DataController implements ActionListener {
 	 * @param boardData the int[][] matrix
 	 */
 	public void onDataReceived(int[][] boardData) {
-		view.addMessage("[DataController] Data has been received by the listener");
+		view.addMessage("[DataController] Data has been received by the listener\n");
 		
 		// if the boad has not been initiliazed yet
 		if (board == null) {
@@ -132,18 +169,27 @@ public class DataController implements ActionListener {
 				}
 				view.addMessage("\n");
 			} 
+			redrawBoard();
 			addHistory();
 		}
 		
-		// print out the matrix for now
+		/* print out the matrix for now
 		for (int x = 7; x >= 0; x--) {
 			for (int y = 0; y < 8; y++) {
 				view.addMessage("[" + boardData[y][x] + "]");
 			}
 			view.addMessage("\n");
 		} 
+		*/
 		
-		
+	}
+	
+	/** gives the coordinates to redraw the board
+	 */
+	public void redrawBoard() {
+		int[] oldcords = board.getMove().getOldCoords()[0];
+		int[] newcords = board.getMove().getNewCoords()[0];
+		view.redrawBoard(oldcords, newcords);
 	}
 	
 	/** 
