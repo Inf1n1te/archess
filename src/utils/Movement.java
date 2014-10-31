@@ -57,5 +57,12 @@ public class Movement {
 		}
 		return value;
 	}
+	
+	public boolean equals(Movement comp) {
+		if (x == comp.getX() && y == comp.getY()) {
+			return true;
+		}
+		return false;
+	}
 
 }

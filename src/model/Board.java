@@ -205,23 +205,19 @@ public class Board {
 			int coords10 = lastMove.getOldCoords()[1][0];
 			int coords11 = lastMove.getOldCoords()[1][1];
 			if (!leftBlackRookMoved
-					&& ((coords00 == 0 && coords01 == 7) || (coords10 == 0
-							&& coords11 == 7))) {
+					&& ((coords00 == 0 && coords01 == 7) || (coords10 == 0 && coords11 == 7))) {
 				leftBlackRookMoved = true;
 			}
 			if (!rightBlackRookMoved
-					&& ((coords00 == 7 && coords01 == 7) || (coords10 == 7
-							&& coords11 == 7))) {
+					&& ((coords00 == 7 && coords01 == 7) || (coords10 == 7 && coords11 == 7))) {
 				rightBlackRookMoved = true;
 			}
 			if (!leftWhiteRookMoved
-					&& ((coords00 == 0 && coords01 == 0) || (coords10 == 0
-							&& coords11 == 0))) {
+					&& ((coords00 == 0 && coords01 == 0) || (coords10 == 0 && coords11 == 0))) {
 				leftWhiteRookMoved = true;
 			}
 			if (!rightWhiteRookMoved
-					&& ((coords00 == 7 && coords01 == 0) || (coords10 == 7
-							&& coords11 == 0))) {
+					&& ((coords00 == 7 && coords01 == 0) || (coords10 == 7 && coords11 == 0))) {
 				rightWhiteRookMoved = true;
 			}
 		}
@@ -490,14 +486,18 @@ public class Board {
 			return true;
 		}
 
-		// Stepping back once before the while loop
-		movement = movement.stepBack();
+		// // Stepping back once before the while loop
+		Movement moveSteps = movement;
 		// Determining LOS for the rest of the pieces
-		while (movement != null) {
+		while (moveSteps != null) {
 			if (getField(new int[] { origin[0] + movement.getX(),
-					origin[1] + movement.getY() }) != null) {
+					origin[1] + movement.getY() }) != null
+					|| (moveSteps.equals(movement) && !getField(destination)
+							.toString()
+							.contains(piece.toString().split("_")[0]))) {
 				return false;
 			}
+			moveSteps.stepBack();
 		}
 
 		return true;
