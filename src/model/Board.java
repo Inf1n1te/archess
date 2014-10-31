@@ -201,7 +201,7 @@ public class Board {
 		}
 		int coords00 = lastMove.getOldCoords()[0][0];
 		int coords01 = lastMove.getOldCoords()[0][1];
-		if (lastMove.getOldCoords()[0] != null) {
+		if (lastMove.getOldCoords()[1] != null) {
 			int coords10 = lastMove.getOldCoords()[1][0];
 			int coords11 = lastMove.getOldCoords()[1][1];
 			if (!leftBlackRookMoved

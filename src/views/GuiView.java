@@ -136,8 +136,8 @@ public class GuiView {
 	 */
 	public void repaintWindow() {
 		System.out.println("moving piece");
-		boardPieces.removeAll();
-		boardPieces.repaint();
+		//boardPieces.removeAll();
+		//boardPieces.repaint();
 		squares[3][0] = squares[0][0];
 		squares[0][0] = new JLabel();
 		boardPieces.revalidate();

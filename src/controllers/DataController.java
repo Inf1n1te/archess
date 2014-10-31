@@ -203,6 +203,7 @@ public class DataController implements ActionListener {
 	/** gives information to the history view to add
 	 */
 	public void addHistory() {
+		System.out.println(board.getMove().isValid());
 		if (board.getMove().getMoveType() == MoveType.SLAYING) {
 			view.addHistory("[" + board.getMove().getMovedPieces()[0] + "] (" +
 					board.getMove().getOldCoords()[0][0] + "," + board.getMove().getOldCoords()[0][1] + ") > (" +
