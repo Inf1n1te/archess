@@ -52,6 +52,10 @@ public class Move {
 	 */
 	private MoveType moveType;
 	/**
+	 * Used besides moveType to improve validation functionality.
+	 */
+	private boolean isPromotion = false;
+	/**
 	 * True if the move is valid.
 	 */
 	private boolean isValid;
@@ -100,7 +104,7 @@ public class Move {
 			board.setField(newCoordsCastling, movedPieceCastling);
 			break;
 		case PROMOTION:
-			// TODO PROMOTION
+			System.err.println("Unused MoveType @Move.updateBoard");
 			break;
 		default:
 			System.err
@@ -109,7 +113,6 @@ public class Move {
 		}
 	}
 
-	// TODO Implement promotion validity
 	/**
 	 * Determine if the move is valid and set the validity.
 	 */
@@ -130,8 +133,7 @@ public class Move {
 		} else if (moveType == MoveType.CASTLING && castlingChecks()) {
 			isValid = true;
 		} else if (moveType == MoveType.PROMOTION) {
-			System.err.println("Not yet implented @Move.determineValidity");
-			// TODO PROMOTION
+			System.err.println("Unused MoveType @Move.determineValidity");
 		} else {
 			isValid = false;
 		}
@@ -237,7 +239,7 @@ public class Move {
 		// Addition for promotion
 		if ((movedPiece == Piece.BLACK_PAWN && newCoords[1] == 0)
 				|| movedPiece == Piece.WHITE_PAWN && newCoords[1] == 7) {
-			moveType = MoveType.PROMOTION;
+			isPromotion = true;
 		}
 
 	}
@@ -260,8 +262,6 @@ public class Move {
 				if (!tempFieldEquals(tempBoard[i][j], oldBoard[i][j])) {
 
 					// Set the coords and movetype
-					// TODO implement promotion movetype (MoveType.PROMOTION).
-					// Requires more detailed raw board input.
 					if (tempBoard[i][j] == TempPiece.EMPTY && oldCoords == null) {
 						oldCoords = new int[] { i, j };
 					} else if (tempBoard[i][j] == TempPiece.EMPTY
@@ -372,6 +372,10 @@ public class Move {
 	public Piece[] getMovedPieces() {
 		Piece[] value = new Piece[] { movedPiece, movedPieceCastling };
 		return value;
+	}
+	
+	public boolean isPromotion() {
+		return isPromotion;
 	}
 
 }
