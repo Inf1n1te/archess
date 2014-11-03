@@ -235,7 +235,7 @@ public class Board {
 	public void setField(int[] coords, Piece piece) {
 		newBoard[coords[0]][coords[1]] = piece;
 	}
-
+	
 	/**
 	 * Gets the piece that is occupying the field on the new board corresponding
 	 * to the input coordinates.

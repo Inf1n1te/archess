@@ -234,12 +234,18 @@ public class Move {
 		if (moveType == MoveType.CASTLING) {
 			movedPieceCastling = oldBoard[oldCoordsCastling[0]][oldCoordsCastling[1]];
 		}
-		// TODO Addition for promotion
+		// Addition for promotion
+		if ((movedPiece == Piece.BLACK_PAWN && newCoords[1] == 0)
+				|| movedPiece == Piece.WHITE_PAWN && newCoords[1] == 7) {
+			moveType = MoveType.PROMOTION;
+		}
+
 	}
 
 	/**
 	 * Determines the type of move (defined by the enum MoveType). And sets the
-	 * coords used for determining the exact move.
+	 * coords used for determining the exact move. Promotion detection is done
+	 * is the determineMove method.
 	 */
 	private void determineMoveType() {
 		// Loading the boards that will be compared
