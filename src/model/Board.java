@@ -473,35 +473,50 @@ public class Board {
 			if ((piece.toString().contains("WHITE") && origin[1] == 1)
 					|| (piece.toString().contains("BLACK") && origin[1] == 6)) {
 				if (getField(new int[] { origin[0] + movement.getX(),
-								origin[1] + movement.getY() }) == null) {
+						origin[1] + movement.getY() }) == null) {
 					movement = movement.stepBack();
-					if (movement == null || getField(new int[] { origin[0] + movement.getX(),
-							origin[1] + movement.getY() }) == null) {
+					if (movement == null
+							|| getField(new int[] {
+									origin[0] + movement.getX(),
+									origin[1] + movement.getY() }) == null) {
 						return true;
 					} else {
 						return false;
 					}
 				}
-			} /*else {
-				// A single square move cannot be blocked
-				return true;
-			}*/
+			} /*
+			 * else { // A single square move cannot be blocked return true; }
+			 */
 		} else if (piece.toString().contains("PAWN")) {
 			return true;
 		}
 
 		// // Stepping back once before the while loop
-		Movement moveSteps = movement;
+		Movement moveSteps = new Movement(destination[0] - origin[0],
+				destination[1] - origin[1]);
 		// Determining LOS for the rest of the pieces
+		int i = 0;
 		while (moveSteps != null) {
-			if (getField(new int[] { origin[0] + movement.getX(),
-					origin[1] + movement.getY() }) != null
-					|| (moveSteps.equals(movement) && !getField(destination)
-							.toString()
-							.contains(piece.toString().split("_")[0]))) {
-				return false;
+			if (moveSteps.equals(new Movement(destination[0] - origin[0],
+					destination[1] - origin[1]))) {
+				if (getField(new int[] { origin[0] + moveSteps.getX(),
+						origin[1] + moveSteps.getY() }) != null
+						&& getField(
+								new int[] { origin[0] + moveSteps.getX(),
+										origin[1] + moveSteps.getY() })
+								.toString().contains(
+										piece.toString().split("_")[0])) {
+					return false;
+				}
+			} else {
+				if (getField(new int[] { origin[0] + moveSteps.getX(),
+						origin[1] + moveSteps.getY() }) != null) {
+					return false;
+				}
 			}
-			moveSteps.stepBack();
+			moveSteps = moveSteps.stepBack();
+			i++;
+			System.out.println(i);
 		}
 
 		return true;
@@ -532,41 +547,41 @@ public class Board {
 
 		// Special pawn rules on regular move, because of the special
 		// "double-forward" rule
-//		for (int x = 0; x < 8; x++) {
-//			for (int y = 0; y < 8; y++) {
-//				System.out.print("[" + newBoard[x][y] + "]");
-//			}
-//			System.out.print("\n");
-//		}
-//		System.out.println(piece);
+		// for (int x = 0; x < 8; x++) {
+		// for (int y = 0; y < 8; y++) {
+		// System.out.print("[" + newBoard[x][y] + "]");
+		// }
+		// System.out.print("\n");
+		// }
+		// System.out.println(piece);
 		if (piece.toString().contains("PAWN") && moveType == MoveType.REGULAR) {
-//			System.out.println("pawn");
+			// System.out.println("pawn");
 			if (piece.toString().contains("WHITE")) {
-//				System.out.println("white");
+				// System.out.println("white");
 				if (origin[1] == 1) {
-//					System.out.println("1");
+					// System.out.println("1");
 					if (Utils.containsMovement(Rules.WHITE_PAWN.getSpecial(),
 							movement)) {
-//						System.out.println("true");
+						// System.out.println("true");
 						return true;
 					}
 				} else if (Utils.containsMovement(
 						Rules.WHITE_PAWN.getRegular(), movement)) {
-//					System.out.println("not 1 true");
+					// System.out.println("not 1 true");
 					return true;
 				}
 			} else if (piece.toString().contains("BLACK")) {
-//				System.out.println("black");
+				// System.out.println("black");
 				if (origin[1] == 6) {
 					System.out.println("6");
 					if (Utils.containsMovement(Rules.BLACK_PAWN.getSpecial(),
 							movement)) {
-//						System.out.println("true");
+						// System.out.println("true");
 						return true;
 					}
 				} else if (Utils.containsMovement(
 						Rules.BLACK_PAWN.getRegular(), movement)) {
-//					System.out.println("not 6 true");
+					// System.out.println("not 6 true");
 					return true;
 				}
 			}
@@ -574,11 +589,11 @@ public class Board {
 		// Every other case
 		else if (Utils.containsMovement(
 				Rules.getMoveSet(piece).getSmart(moveType), movement)) {
-//			System.out.println("not pawn true");
+			// System.out.println("not pawn true");
 			return true;
 		}
 		// Or return false
-//		System.out.println("not pawn false");
+		// System.out.println("not pawn false");
 		return false;
 
 	}
@@ -599,9 +614,9 @@ public class Board {
 				Piece field = getField(origin);
 				if (field != null
 						&& field.toString().contains(color.toUpperCase())) {
-//					System.out.println("check");
-					if (canMove(origin, coords, field, MoveType.SLAYING) && hasLOS(
-							origin, coords, field, MoveType.SLAYING)) {
+					// System.out.println("check");
+					if (canMove(origin, coords, field, MoveType.SLAYING)
+							&& hasLOS(origin, coords, field, MoveType.SLAYING)) {
 						return true;
 					}
 				}
