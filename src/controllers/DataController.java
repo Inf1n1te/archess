@@ -181,6 +181,7 @@ public class DataController implements ActionListener {
 	/** gives information to the history view to add
 	 */
 	public void addInformation() {
+		System.out.println(board.getMove().isValid());
 		view.setValid(board.getMove().isValid());
 		if (board.getMove().getMoveType() == MoveType.SLAYING) {
 			
@@ -306,7 +307,7 @@ public class DataController implements ActionListener {
 							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
 							new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
 							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-							new int[] { 1, 0, 0, 1, 0, 0, 2, 0 } }
+							new int[] { 1, 0, 1, 0, 0, 0, 2, 0 } }
 					);
 		
 		} else if (test == 9) {

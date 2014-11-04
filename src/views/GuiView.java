@@ -111,7 +111,7 @@ public class GuiView {
 			turnBlack = ImageIO.read(getClass().getResource("/images/turnblack.png"));
 			turnWhite = ImageIO.read(getClass().getResource("/images/turnwhite.png"));
 			valid = ImageIO.read(getClass().getResource("/images/valid.png"));
-			newGame = ImageIO.read(getClass().getResource("/images/newGame.png"));
+			newGame = ImageIO.read(getClass().getResource("/images/newgame.png"));
 			invalid = ImageIO.read(getClass().getResource("/images/invalid.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
