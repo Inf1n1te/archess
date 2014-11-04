@@ -336,6 +336,14 @@ public class Move {
 	public LinkedList<Piece> getSlainPieces() {
 		return board.getSlain();
 	}
+	
+	/**
+	 * Gets the piece slain this turn.
+	 * @return Piece slainPiece
+	 */
+	public Piece getSlainPiece() {
+		return slainPiece;
+	}
 
 	/**
 	 * Gets the old coords of all the moved pieces.

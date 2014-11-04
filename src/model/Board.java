@@ -495,7 +495,6 @@ public class Board {
 		Movement moveSteps = new Movement(destination[0] - origin[0],
 				destination[1] - origin[1]);
 		// Determining LOS for the rest of the pieces
-		int i = 0;
 		while (moveSteps != null) {
 			if (moveSteps.equals(new Movement(destination[0] - origin[0],
 					destination[1] - origin[1]))) {
@@ -515,10 +514,7 @@ public class Board {
 				}
 			}
 			moveSteps = moveSteps.stepBack();
-			i++;
-			System.out.println(i);
 		}
-
 		return true;
 	}
 
@@ -546,42 +542,25 @@ public class Board {
 				destination[1] - origin[1]);
 
 		// Special pawn rules on regular move, because of the special
-		// "double-forward" rule
-		// for (int x = 0; x < 8; x++) {
-		// for (int y = 0; y < 8; y++) {
-		// System.out.print("[" + newBoard[x][y] + "]");
-		// }
-		// System.out.print("\n");
-		// }
-		// System.out.println(piece);
 		if (piece.toString().contains("PAWN") && moveType == MoveType.REGULAR) {
-			// System.out.println("pawn");
 			if (piece.toString().contains("WHITE")) {
-				// System.out.println("white");
 				if (origin[1] == 1) {
-					// System.out.println("1");
 					if (Utils.containsMovement(Rules.WHITE_PAWN.getSpecial(),
 							movement)) {
-						// System.out.println("true");
 						return true;
 					}
 				} else if (Utils.containsMovement(
 						Rules.WHITE_PAWN.getRegular(), movement)) {
-					// System.out.println("not 1 true");
 					return true;
 				}
 			} else if (piece.toString().contains("BLACK")) {
-				// System.out.println("black");
 				if (origin[1] == 6) {
-					System.out.println("6");
 					if (Utils.containsMovement(Rules.BLACK_PAWN.getSpecial(),
 							movement)) {
-						// System.out.println("true");
 						return true;
 					}
 				} else if (Utils.containsMovement(
 						Rules.BLACK_PAWN.getRegular(), movement)) {
-					// System.out.println("not 6 true");
 					return true;
 				}
 			}
@@ -589,11 +568,9 @@ public class Board {
 		// Every other case
 		else if (Utils.containsMovement(
 				Rules.getMoveSet(piece).getSmart(moveType), movement)) {
-			// System.out.println("not pawn true");
 			return true;
 		}
 		// Or return false
-		// System.out.println("not pawn false");
 		return false;
 
 	}
@@ -644,6 +621,63 @@ public class Board {
 			}
 		}
 		return coords;
+	}
+
+	/**
+	 * Undo the last move if it was invalid.
+	 * 
+	 * @return boolean, true if succesful, false if move was invalid
+	 */
+	public boolean undoMove() {
+		if (lastMove.isValid()) {
+			return false;
+		} else {
+			undoHasMovedCastling(lastMove);
+			slain.removeLastOccurrence(lastMove.getSlainPiece());
+			newBoard = oldBoard;
+		}
+		return true;
+	}
+
+	/**
+	 * Undo the hasMovedCastling function using a move.
+	 * 
+	 * @param lastMove
+	 *            the move you want to use for undoing
+	 */
+	private void undoHasMovedCastling(Move lastMove) {
+		if (blackKingMoved
+				&& (lastMove.getMovedPieces()[0] == Piece.BLACK_KING || lastMove
+						.getMovedPieces()[1] == Piece.BLACK_KING)) {
+			blackKingMoved = false;
+		}
+		if (whiteKingMoved
+				&& (lastMove.getMovedPieces()[0] == Piece.WHITE_KING || lastMove
+						.getMovedPieces()[1] == Piece.WHITE_KING)) {
+			whiteKingMoved = false;
+		}
+		int coords00 = lastMove.getOldCoords()[0][0];
+		int coords01 = lastMove.getOldCoords()[0][1];
+		if (lastMove.getOldCoords()[1] != null) {
+			int coords10 = lastMove.getOldCoords()[1][0];
+			int coords11 = lastMove.getOldCoords()[1][1];
+			if (leftBlackRookMoved
+					&& ((coords00 == 0 && coords01 == 7) || (coords10 == 0 && coords11 == 7))) {
+				leftBlackRookMoved = false;
+			}
+			if (rightBlackRookMoved
+					&& ((coords00 == 7 && coords01 == 7) || (coords10 == 7 && coords11 == 7))) {
+				rightBlackRookMoved = false;
+			}
+			if (leftWhiteRookMoved
+					&& ((coords00 == 0 && coords01 == 0) || (coords10 == 0 && coords11 == 0))) {
+				leftWhiteRookMoved = false;
+			}
+			if (rightWhiteRookMoved
+					&& ((coords00 == 7 && coords01 == 0) || (coords10 == 7 && coords11 == 0))) {
+				rightWhiteRookMoved = false;
+			}
+		}
 	}
 
 }
