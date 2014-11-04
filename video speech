@@ -1,0 +1,32 @@
+0s
+
+Welcome to augmented reality chess. We are group 20, and in this video we will explain the design choices we made during the project.
+
+7.5s   d7.5s
+
+In this project we translate a physical move on a chessboard, captured with a camera, to a virtual move on a screen.
+
+16s    d8.5s
+
+The first big choice we made was the division of labor between the FPGA and the Raspberry Pi. We chose to let the FPGA do only the image recognition and it's part of the connection, because the recognition is the hardest part of the project and this way our EE students can focus mostly on that. The rest is done by the Raspberry Pi.
+
+36s    d20s
+
+The camera we chose is the Terasic D5M, which is made for the Terasic FPGA boards, like the one we have. It also comes with software required to use it on the FPGA and has some useful additional functions.
+
+51s    d15s
+
+There are two methods to do the image recognition: color comparison and image comparison. Color comparison checks the color of every pixel and uses the ones within a certain color range. Image comparison uses a database of images and compares those to parts of every frame. The latter is harder and slower to implement, therefore we chose to use the color recognition.
+
+76s    d25s
+
+There are basically two ways to do the communication: write our own protocol or use an existing one. Writing our own can be difficult, especially when trying to achieve a reliable and fast data transfer. We tried it, but it didn't work out. That's why we chose to use an existing protocol. We thought about both SPI and I squared C, but chose I squared C, which is the easiest to implement and very easily expandable.
+
+101s    d25s
+
+The first choice we made for the Graphical User Interface is how much we were going to put on the screen. We could either keep it clean and simple or present various statistics and graphs. We decided we wanted to keep it clean and simple, to prevent a cluttered interface making it harder to read.
+The second choice was about the animations of the moving pieces. It looks better and it makes it easier to see which piece is moving, but demands more from the CPU on the Raspberry Pi, which could slow down important pars of the application.
+
+Thank you for watching.
+
+131s    d30s
