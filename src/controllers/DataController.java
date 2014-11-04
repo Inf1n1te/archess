@@ -2,6 +2,7 @@ package controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 
@@ -16,32 +17,32 @@ public class DataController implements ActionListener {
 	private GuiView view;
 	private DataListener listener;
 	private boolean listenerBooted;
+	private HashMap moves;
 	
 	// controller has control over board
 	private Board board;
-	private int test;
+	private int test, moveNumber, slainBlack, slainWhite;
 	
 	/**
 	 * Instantiates the view
 	 */
 	public DataController() {
-		System.out.println("[DataController] DataController has started..");
 		view = new GuiView();
-		System.out.println("[DataController] Booted up the view");
 		// add the actionListeners on view
 		addActionListeners(this);
+		
 		listenerBooted = false;
 		listener = new DataListener();
 		listener.register(this);
-		test = 0;
-	}
-	
-	/** 
-	 * Triggers the addActionListener function on view
-	 * @param ae - the current dataController
-	 */
-	private void addActionListeners(DataController ae) {
-		view.addActionListeners(ae);
+		test = 1;
+		
+		slainBlack = 0;
+		slainWhite = 0;
+		
+		moves = new HashMap();
+		moveNumber = 0;
+		
+		initBoard();
 	}
 	
 	@Override
@@ -54,99 +55,66 @@ public class DataController implements ActionListener {
 				listener.start();
 				listenerBooted = true;
 			}
+		} else if (clickedButton.getName().equals("newgame")) {
+			reset();
+		} else if (clickedButton.getName().equals("replay")) {
+			System.out.println("Replaying the game");
+			replayGame();
 		} else if (clickedButton.getName().equals("simulator")) {
-			//view.addMessage("[DataController] repainting\n");
-			//view.repaintWindow();
-			if (test == 0) {
-			
-			listener.sampleData(
-					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
-					);
-			
-			
-			} else if (test == 1) {
-				listener.sampleData(
-						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 0, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 1, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
-						);
-			
-			} else if (test == 2) {
-				listener.sampleData(
-						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
-								new int[] { 1, 1, 1, 0, 0, 2, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
-						);
-			
-			} else if (test == 3) {
-				listener.sampleData(
-						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
-								new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 1, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
-						);
-			
-			} else if (test == 4) {
-				listener.sampleData(
-						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
-								new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 1 } }
-						);
-			
-			} else if (test == 5) {
-				listener.sampleData(
-						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
-								new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 1, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 0 } }
-						);
-			
-			} else if (test == 6) {
-				listener.sampleData(
-						new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
-								new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 1, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
-								new int[] { 1, 1, 0, 0, 0, 0, 2, 0 } }
-						);
-			
-			}
-			test++; 
-			//view.repaintWindow();
+			simulate();
 		}
+	}
+	
+	/** 
+	 * Resets the controller side of the board, and calls the reset function
+	 * on the view side
+	 */
+	private void reset() {
+		System.out.println("Starting new game");
+		HashMap movesCopy = (HashMap) moves.clone();
+		view.reset(movesCopy);
+		moves.clear();
+		
+		// reinit the board
+		initBoard();
+		
+		// reinit variables
+		moveNumber = 0;
+		test = 1;
+		slainBlack = 0;
+		slainWhite = 0;
+	}
+	
+	/** 
+	 * Initialize board
+	 */
+	private void initBoard() {
+		// create board
+		board = new Board(new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+				new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+				new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+				new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+				new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+				new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+				new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+				new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
+		);
+	}
+	
+	/** 
+	 * Triggers the addActionListener function on view
+	 * @param ae - the current dataController
+	 */
+	private void addActionListeners(DataController ae) {
+		view.addActionListeners(ae);
+	}
+	
+	/** 
+	 * Calls the revertboard function on the view with flag reset false
+	 * meaning all the moves will get executed after reverting
+	 */
+	private void replayGame() {
+		view.revertBoard(moves, false);
 	}
 	
 	/**
@@ -159,7 +127,7 @@ public class DataController implements ActionListener {
 		
 		// if the boad has not been initiliazed yet
 		if (board == null) {
-			board = new Board(boardData);
+			initBoard();
 		} else {
 			board.newTurn(boardData);
 			Piece[][] pieces = board.getNewBoard();
@@ -170,7 +138,7 @@ public class DataController implements ActionListener {
 				view.addMessage("\n");
 			} 
 			redrawBoard();
-			addHistory();
+			addInformation();
 		}
 		
 		/* print out the matrix for now
@@ -189,7 +157,17 @@ public class DataController implements ActionListener {
 	public void redrawBoard() {
 		int[] oldcords = board.getMove().getOldCoords()[0];
 		int[] newcords = board.getMove().getNewCoords()[0];
-		view.redrawBoard(oldcords, newcords);
+		
+		int[] moveCords = new int[4];
+		moveCords[0] = oldcords[0];
+		moveCords[1] = oldcords[1];
+		moveCords[2] = newcords[0];
+		moveCords[3] = newcords[1];
+		
+		moves.put(moveNumber, moveCords);
+		moveNumber++;
+		
+		view.redrawBoard(oldcords, newcords, false);
 	}
 	
 	/** 
@@ -202,9 +180,27 @@ public class DataController implements ActionListener {
 	
 	/** gives information to the history view to add
 	 */
-	public void addHistory() {
-		System.out.println(board.getMove().isValid());
+	public void addInformation() {
+		view.setValid(board.getMove().isValid());
 		if (board.getMove().getMoveType() == MoveType.SLAYING) {
+			
+			String slainPiece = "" + board.getMove().getSlainPieces().peekLast();
+			if (slainPiece.contains("BLACK")) {
+				slainBlack++;
+				if (slainBlack % 2 == 0) {
+					view.addBlackSlain(slainPiece + "\n");
+				} else {
+					view.addBlackSlain(slainPiece + " ");
+				}
+			} else {
+				slainWhite++;
+				if (slainWhite % 2 == 0) {
+					view.addWhiteSlain(slainPiece + "\n");
+				} else {
+					view.addWhiteSlain(slainPiece + " ");
+				}
+			}
+			
 			view.addHistory("[" + board.getMove().getMovedPieces()[0] + "] (" +
 					board.getMove().getOldCoords()[0][0] + "," + board.getMove().getOldCoords()[0][1] + ") > (" +
 					board.getMove().getNewCoords()[0][0] + "," + board.getMove().getNewCoords()[0][1] + ") \n has slain [" + 
@@ -215,5 +211,118 @@ public class DataController implements ActionListener {
 					board.getMove().getNewCoords()[0][0] + "," + board.getMove().getNewCoords()[0][1] + ")\n");
 		}
 	} 
+	
+	private void simulate() {
+		if (test == 1) {
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 0, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 1, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
+					);
+		
+		} else if (test == 2) {
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+							new int[] { 1, 1, 1, 0, 0, 2, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
+					);
+		
+		} else if (test == 3) {
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+							new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 1, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 } }
+					);
+		
+		} else if (test == 4) {
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+							new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 1 } }
+					);
+		
+		} else if (test == 5) {
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+							new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 1, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 0 } }
+					);
+		
+		} else if (test == 6) {
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+							new int[] { 1, 1, 0, 0, 0, 2, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 1, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 0 } }
+					);
+		
+		} else if (test == 7) {
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+							new int[] { 1, 1, 0, 0, 0, 2, 2, 1 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 0 } }
+					);
+		
+		} else if (test == 8) {
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+							new int[] { 1, 1, 0, 0, 0, 2, 2, 1 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 0, 0, 1, 0, 0, 2, 0 } }
+					);
+		
+		} else if (test == 9) {
+			listener.sampleData(
+					new int[][] { new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 0, 1, 0, 0, 0, 0, 2, 0 },
+							new int[] { 1, 1, 0, 0, 0, 2, 2, 1 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 0, 2 },
+							new int[] { 1, 1, 0, 0, 0, 0, 2, 2 },
+							new int[] { 1, 0, 0, 0, 1, 0, 2, 0 } }
+					);
+		
+		}
+		test++; 
+	}
 
 }
