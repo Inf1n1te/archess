@@ -40,7 +40,7 @@ public class Movement {
 	 */
 	public Movement stepBack() {
 		Movement value = null;
-		if ((x != 0 || x != 1) && (y != 0 || y != 1)) {
+		if (!((x == 0 || x == 1) && (y == 0 || y == 1))) {
 			int newX;
 			if (x != 0) {
 				newX = (Math.abs(x) - 1) * (int) Math.signum(x);

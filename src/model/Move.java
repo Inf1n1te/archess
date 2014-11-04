@@ -83,6 +83,7 @@ public class Move {
 
 		// Post-move validation (is the active players king now under attack?)
 		determinePostValidity();
+
 	}
 
 	/**
@@ -118,6 +119,7 @@ public class Move {
 	 */
 	private void determineValidity() {
 		// Checking if move is possible
+
 		if (moveType == MoveType.REGULAR) {
 			if (board.hasLOS(oldCoords, newCoords, movedPiece, moveType)
 					&& board.canMove(oldCoords, newCoords, movedPiece, moveType)) {
@@ -137,6 +139,7 @@ public class Move {
 		} else {
 			isValid = false;
 		}
+
 	}
 
 	/**
@@ -236,6 +239,7 @@ public class Move {
 		if (moveType == MoveType.CASTLING) {
 			movedPieceCastling = oldBoard[oldCoordsCastling[0]][oldCoordsCastling[1]];
 		}
+
 		// Addition for promotion
 		if ((movedPiece == Piece.BLACK_PAWN && newCoords[1] == 0)
 				|| movedPiece == Piece.WHITE_PAWN && newCoords[1] == 7) {

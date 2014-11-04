@@ -472,16 +472,20 @@ public class Board {
 		if (piece.toString().contains("PAWN") && moveType == MoveType.REGULAR) {
 			if ((piece.toString().contains("WHITE") && origin[1] == 1)
 					|| (piece.toString().contains("BLACK") && origin[1] == 6)) {
-				movement = movement.stepBack();
-				if (movement != null
-						&& getField(new int[] { origin[0] + movement.getX(),
+				if (getField(new int[] { origin[0] + movement.getX(),
 								origin[1] + movement.getY() }) == null) {
-					return true;
+					movement = movement.stepBack();
+					if (movement == null || getField(new int[] { origin[0] + movement.getX(),
+							origin[1] + movement.getY() }) == null) {
+						return true;
+					} else {
+						return false;
+					}
 				}
-			} else {
+			} /*else {
 				// A single square move cannot be blocked
 				return true;
-			}
+			}*/
 		} else if (piece.toString().contains("PAWN")) {
 			return true;
 		}
@@ -528,25 +532,41 @@ public class Board {
 
 		// Special pawn rules on regular move, because of the special
 		// "double-forward" rule
+//		for (int x = 0; x < 8; x++) {
+//			for (int y = 0; y < 8; y++) {
+//				System.out.print("[" + newBoard[x][y] + "]");
+//			}
+//			System.out.print("\n");
+//		}
+//		System.out.println(piece);
 		if (piece.toString().contains("PAWN") && moveType == MoveType.REGULAR) {
+//			System.out.println("pawn");
 			if (piece.toString().contains("WHITE")) {
+//				System.out.println("white");
 				if (origin[1] == 1) {
+//					System.out.println("1");
 					if (Utils.containsMovement(Rules.WHITE_PAWN.getSpecial(),
 							movement)) {
+//						System.out.println("true");
 						return true;
 					}
 				} else if (Utils.containsMovement(
 						Rules.WHITE_PAWN.getRegular(), movement)) {
+//					System.out.println("not 1 true");
 					return true;
 				}
 			} else if (piece.toString().contains("BLACK")) {
+//				System.out.println("black");
 				if (origin[1] == 6) {
+					System.out.println("6");
 					if (Utils.containsMovement(Rules.BLACK_PAWN.getSpecial(),
 							movement)) {
+//						System.out.println("true");
 						return true;
 					}
 				} else if (Utils.containsMovement(
 						Rules.BLACK_PAWN.getRegular(), movement)) {
+//					System.out.println("not 6 true");
 					return true;
 				}
 			}
@@ -554,9 +574,11 @@ public class Board {
 		// Every other case
 		else if (Utils.containsMovement(
 				Rules.getMoveSet(piece).getSmart(moveType), movement)) {
+//			System.out.println("not pawn true");
 			return true;
 		}
 		// Or return false
+//		System.out.println("not pawn false");
 		return false;
 
 	}
@@ -577,8 +599,11 @@ public class Board {
 				Piece field = getField(origin);
 				if (field != null
 						&& field.toString().contains(color.toUpperCase())) {
-					return (canMove(origin, coords, field, MoveType.SLAYING) && hasLOS(
-							origin, coords, field, MoveType.SLAYING));
+//					System.out.println("check");
+					if (canMove(origin, coords, field, MoveType.SLAYING) && hasLOS(
+							origin, coords, field, MoveType.SLAYING)) {
+						return true;
+					}
 				}
 			}
 		}
