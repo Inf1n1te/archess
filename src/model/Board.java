@@ -235,7 +235,7 @@ public class Board {
 	public void setField(int[] coords, Piece piece) {
 		newBoard[coords[0]][coords[1]] = piece;
 	}
-	
+
 	/**
 	 * Gets the piece that is occupying the field on the new board corresponding
 	 * to the input coordinates.
@@ -532,7 +532,9 @@ public class Board {
 			if (piece.toString().contains("WHITE")) {
 				if (origin[1] == 1) {
 					if (Utils.containsMovement(Rules.WHITE_PAWN.getSpecial(),
-							movement)) {
+							movement)
+							|| Utils.containsMovement(
+									Rules.WHITE_PAWN.getRegular(), movement)) {
 						return true;
 					}
 				} else if (Utils.containsMovement(
@@ -542,7 +544,9 @@ public class Board {
 			} else if (piece.toString().contains("BLACK")) {
 				if (origin[1] == 6) {
 					if (Utils.containsMovement(Rules.BLACK_PAWN.getSpecial(),
-							movement)) {
+							movement)
+							|| Utils.containsMovement(
+									Rules.BLACK_PAWN.getRegular(), movement)) {
 						return true;
 					}
 				} else if (Utils.containsMovement(
