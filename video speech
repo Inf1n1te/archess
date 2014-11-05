@@ -8,7 +8,7 @@ In this project we translate a physical move on a chessboard, captured with a ca
 
 16s    d8.5s
 
-The first big choice we made was the division of labor between the FPGA and the Raspberry Pi. We chose to let the FPGA do only the image recognition and it's part of the connection, because the recognition was by far the most important and diffucult part of the project and this way our EE students were able to focus completely on that. The algorithms on the data and the graphical output of the application is handled by the pi. <The rest is done by the Raspberry Pi.>
+The first big choice we made was the division of labor between the FPGA and the Raspberry Pi. We chose to let the FPGA do only the image recognition and it's part of the connection, because the recognition was by far the most important and diffucult part of the project and this way our EE students were able to focus completely on that. The algorithms on the data and the graphical output of the application is handled by the Raspberry Pi.
 
 36s    d20s
 
@@ -26,7 +26,7 @@ There are basically two ways to do the communication: write our own protocol or 
 
 The first choice we made for the Graphical User Interface is how much we were going to put on the screen. We could either keep it clean and simple or present various statistics and graphs. We decided we wanted to keep it clean and simple, to prevent a cluttered interface making it harder to read.
 
-The second choice was about the animations of the moving pieces. It looks better and it makes it easier to see which piece is moving, but demands more from the CPU on the Raspberry Pi, which could slow down important pars of the application.
+The other choice was about the animations of the moving pieces. It looks better when they are animated and it makes it easier to see which piece is moving. But it also demands more from the CPU on the Raspberry Pi, which could slow down important pars of the application.
 
 Thank you for watching.
 
